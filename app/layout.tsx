@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import NavigationBar from "@/components/navigation/navigation-bar";
 import { Montserrat } from 'next/font/google';
 import { Toaster } from "sonner";
-
+import Navbar from "@/components/Navbar";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -14,8 +13,18 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Leadership | Tiny Scholar Hub",
-  description: "A place for entreprenuers to develop their skills.",
+  title: "Home Stay English Vietnam",
+  description: "STAY FREE • TEACH ENGLISH • LIVE LOCAL",
+  openGraph: {
+    images: [
+      {
+        url: "/opengraph.png", 
+        width: 1200,
+        height: 630,
+        alt: "Home Stay English Vietnam",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -27,8 +36,9 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${montserrat.className} antialiased`}
+        suppressHydrationWarning
       >
-        <NavigationBar/>
+        <Navbar/>
         {children}
         <Toaster/>
       </body>

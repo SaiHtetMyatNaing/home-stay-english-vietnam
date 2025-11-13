@@ -30,7 +30,7 @@ export default function NavigationBar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+      <div className="max-w-full mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-3 transition-opacity hover:opacity-90">
           <div className="relative h-12 w-12 overflow-hidden rounded-sm">
