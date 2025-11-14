@@ -7,7 +7,7 @@
 generator client {
   provider = "prisma-client"
   output   = "../app/generated/prisma"
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+   binaryTargets = ["native", "linux-musl", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
@@ -15,48 +15,6 @@ datasource db {
   url      = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
-
-model Quiz {
-  id          String     @id @default(cuid())
-  title       String
-  description String?
-  questions   Question[]
-}
-
-model Slide {
-  id     String  @id @default(cuid())
-  quizId String
-  number Int
-  images Image[]
-}
-
-model Image {
-  id      String @id @default(cuid())
-  slideId String
-  url     String
-  order   Int
-  slide   Slide  @relation(fields: [slideId], references: [id])
-}
-
-model Question {
-  id       String   @id @default(cuid())
-  quizId   String
-  slideId  String?
-  content  String
-  answerId String? // references the correct Option
-  quiz     Quiz     @relation(fields: [quizId], references: [id])
-  options  Option[]
-}
-
-model Option {
-  id         String   @id @default(cuid())
-  questionId String
-  text       String
-  isCorrect  Boolean  @default(false)
-  order      Int
-  question   Question @relation(fields: [questionId], references: [id])
-}
-
 model User {
   id            String    @id @default(cuid())
   name          String
