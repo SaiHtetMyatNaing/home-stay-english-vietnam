@@ -20,6 +20,6 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  trustedOrigins: ["http://localhost:3000", "http://localhost:8080"],
+  trustedOrigins: ["http://localhost:3000", "http://localhost:8080" , "https://homestay-english-vietnam.vercel.app"],
   plugins: [nextCookies()]
 });
