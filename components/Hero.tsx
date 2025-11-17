@@ -26,7 +26,7 @@ export function HeroSectionDemo() {
   };
 
   return (
-    <ImagesSlider  className="h-[53rem] overflow-hidden" images={images}>
+    <ImagesSlider className="h-[53rem]" images={images}>
       {/* Dark overlay for better text readability */}
       <div id="home" className="absolute inset-0 z-10 bg-black/30" />
 

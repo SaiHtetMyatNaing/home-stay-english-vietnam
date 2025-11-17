@@ -9,7 +9,7 @@ import Programs from '@/components/Programs'
 
 const page = () => {
   return (
-    <>
+    <div className='max-w-full overflow-hidden'>
         <Navbar/>
 
     <HeroSectionDemo/>
@@ -19,7 +19,7 @@ const page = () => {
     <Gallery/>
     <Contact/>
     <Footer/>
-    </>
+    </div>
   )
 }
 

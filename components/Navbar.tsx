@@ -59,7 +59,7 @@ const Navbar = () => {
         paddingBottom: isScrolled ? "0.8rem" : "1.5rem",
         opacity: 1,
       }}
-      initial={{ opacity : 0}}
+      initial={{ opacity: 0  , x : 0 , y : 0 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? "bg-white/90 shadow-lg backdrop-blur-md" : "bg-transparent"
@@ -124,7 +124,7 @@ const Navbar = () => {
             </motion.div>
           </button>
 
-          {/* DESKTOP NAV - Now hidden at lg and below, shown at lg+ */}
+          {/* DESKTOP NAV */}
           <div className="items-center hidden gap-1 lg:flex">
             {navLinks.map((link) => (
               <button
@@ -149,16 +149,16 @@ const Navbar = () => {
             ))}
 
             <Link
-               href="https://docs.google.com/forms/"
-               target="_blank"
+              href="https://docs.google.com/forms/"
+              target="_blank"
               className="px-6 py-2 ml-4 font-semibold text-white transition-all duration-200 transform rounded-full shadow-lg bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-xl hover:scale-95"
             >
               Apply Now
             </Link>
           </div>
 
-          {/* Mobile Toggle - Now shown at lg and below */}
-          <Button
+          {/* Mobile Toggle */}
+         <Button
             className={`lg:hidden bg-transparent p-2 rounded-lg transition-all ${
               isScrolled ? "text-gray-800" : "text-white"
             }`}
@@ -168,23 +168,18 @@ const Navbar = () => {
           </Button>
         </div>
 
-        {/* MOBILE MENU - Now shown at lg and below */}
+        {/* MOBILE MENU - Instant appearance on mobile */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setIsMobileMenuOpen(false)}
+              {/* Backdrop - instant */}
+              <div
                 className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+                onClick={() => setIsMobileMenuOpen(false)}
               />
 
-              <motion.div
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -100, opacity: 0 }}
-                transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              {/* Menu panel - no entrance animation on mobile */}
+              <div
                 className="fixed inset-x-0 top-0 z-50 bg-white shadow-2xl lg:hidden"
                 style={{ paddingTop: "max(env(safe-area-inset-top), 1.5rem)" }}
               >
@@ -205,12 +200,9 @@ const Navbar = () => {
 
                 <div className="container px-6 pb-10 mx-auto">
                   <div className="space-y-2">
-                    {navLinks.map((link, i) => (
-                      <motion.button
+                    {navLinks.map((link) => (
+                      <button
                         key={link.id}
-                        initial={{ x: -40, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: i * 0.07 }}
                         onClick={() => scrollToSection(link.id)}
                         className={`w-full text-left px-6 py-4 rounded-2xl text-lg font-medium transition-all ${
                           activeSection === link.id
@@ -219,26 +211,21 @@ const Navbar = () => {
                         }`}
                       >
                         {link.label}
-                      </motion.button>
+                      </button>
                     ))}
 
-                    <motion.div
-                      initial={{ scale: 0.95, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.4 }}
-                      className="pt-6"
-                    >
+                    <div className="pt-6">
                       <Link
                         href="https://docs.google.com/forms/"
-                          target="_blank"
-                        className="w-full p-3 text-lg font-bold rounded-full shadow-xl h-14 bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500"
-                      > 
+                        target="_blank"
+                        className="flex justify-center w-full p-3 text-lg font-bold rounded-full shadow-xl h-14 bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500"
+                      >
                         Apply Now
                       </Link>
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </>
           )}
         </AnimatePresence>
