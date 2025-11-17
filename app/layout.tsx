@@ -13,6 +13,7 @@ const montserrat = Montserrat({
 
 // IMPORTANT: Use your actual domain
 const siteUrl = 'https://www.englishhomestayvietnam.com';
+const openGraphImage = `https://ik.imagekit.io/rlw77vgih/opengraph.png`;
 
 export const metadata: Metadata = {
   // Basic
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
       'Free homestay for international English teachers. Practice English with locals, share daily life, explore Vietnam culture. Apply now!',
     images: [
       {
-        url: `${siteUrl}/opengraph.png`, // FIXED: Full absolute URL
+        url: openGraphImage, // FIXED: Full absolute URL
         width: 1200,
         height: 630,
         alt: 'Foreign teachers and Vietnamese learners laughing together at homestay',
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
     title: 'Teach English & Live Free in Vietnam | English Homestay',
     description:
       'Free accommodation, cultural exchange, 15 hrs/week teaching. 2 weeks–3 months. Apply now!',
-    images: [`${siteUrl}/opengraph.png`], // FIXED: Full absolute URL
+    images: [openGraphImage], // FIXED: Full absolute URL
     creator: '@EnglishHomestayVN', 
   },
 
