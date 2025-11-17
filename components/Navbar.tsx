@@ -49,7 +49,7 @@ const Navbar = () => {
     { label: "Contact", id: "contact" },
   ];
 
-  const brandText = "HomeStay English Vietnam";
+  const brandText = "English Homestay Vietnam";
   const brandLetters = brandText.split("");
 
   return (
@@ -124,8 +124,8 @@ const Navbar = () => {
             </motion.div>
           </button>
 
-          {/* DESKTOP NAV - Now hidden at xl and below, shown at xl+ */}
-          <div className="items-center hidden gap-1 xl:flex">
+          {/* DESKTOP NAV - Now hidden at lg and below, shown at lg+ */}
+          <div className="items-center hidden gap-1 lg:flex">
             {navLinks.map((link) => (
               <button
                 key={link.id}
@@ -157,9 +157,9 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Mobile Toggle - Now shown at md and below */}
+          {/* Mobile Toggle - Now shown at lg and below */}
           <Button
-            className={`lg:hidden p-2 rounded-lg transition-all ${
+            className={`lg:hidden bg-transparent p-2 rounded-lg transition-all ${
               isScrolled ? "text-gray-800" : "text-white"
             }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -168,7 +168,7 @@ const Navbar = () => {
           </Button>
         </div>
 
-        {/* MOBILE MENU - Now shown at md and below */}
+        {/* MOBILE MENU - Now shown at lg and below */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <>
@@ -192,12 +192,12 @@ const Navbar = () => {
                   <button onClick={() => scrollToSection("home")} className="flex items-center gap-3">
                     <Image src="logo.svg" alt="Logo" width="10" height="10" className="w-auto h-9 drop-shadow-md" />
                     <span className="text-[1.5em] font-black tracking-tight text-gray-900">
-                      Home Stay English Vietnam
+                      English Homestay Vietnam
                     </span>
                   </button>
                   <Button
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-2 transition-colors rounded-full hover:bg-gray-100"
+                    className="p-2 transition-colors bg-transparent border rounded-full hover:bg-gray-100"
                   >
                     <X size={28} className="text-gray-700" />
                   </Button>
@@ -231,8 +231,8 @@ const Navbar = () => {
                       <Link
                         href="https://docs.google.com/forms/"
                           target="_blank"
-                        className="w-full text-lg font-bold shadow-xl h-14 rounded-2xl bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500"
-                      >
+                        className="w-full p-3 text-lg font-bold rounded-full shadow-xl h-14 bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500"
+                      > 
                         Apply Now
                       </Link>
                     </motion.div>
