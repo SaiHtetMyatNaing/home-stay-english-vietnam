@@ -15,7 +15,6 @@ const page = () => {
     <Benefits/>
     <Gallery/>
     <Contact/>
-
     <Footer/>
     </>
   )

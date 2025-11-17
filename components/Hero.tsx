@@ -5,6 +5,7 @@ import React from "react";
 import { ArrowDown, Globe, Heart, Users } from "lucide-react";
 import { ImagesSlider } from "./ui/images-slider";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 export function HeroSectionDemo() {
   const images = [
@@ -27,21 +28,21 @@ export function HeroSectionDemo() {
   return (
     <ImagesSlider  className="h-[53rem] overflow-hidden" images={images}>
       {/* Dark overlay for better text readability */}
-      <div id="home" className="absolute inset-0 bg-black/30 z-10" />
+      <div id="home" className="absolute inset-0 z-10 bg-black/30" />
 
       {/* Center Content Container */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative z-50 flex flex-col items-center justify-center h-full text-center px-6 max-w-5xl mx-auto"
+        className="relative z-50 flex flex-col items-center justify-center h-full max-w-5xl px-6 mx-auto text-center"
       >
         {/* Badge */}
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="mb-6 inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-sm font-medium tracking-wider"
+          className="inline-flex items-center gap-2 px-5 py-2 mb-6 text-sm font-medium tracking-wider text-white border rounded-full bg-white/20 backdrop-blur-md border-white/30"
         >
           <Heart className="w-4 h-4 text-lime-300 fill-lime-300" />
           STAY FREE • TEACH ENGLISH • LIVE LOCAL
@@ -52,7 +53,7 @@ export function HeroSectionDemo() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.7 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight"
+          className="mb-6 text-5xl font-bold leading-tight text-white md:text-7xl lg:text-8xl"
         >
           Teach. Travel.{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-lime-400">
@@ -65,7 +66,7 @@ export function HeroSectionDemo() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.7 }}
-          className="text-xl md:text-2xl text-gray-100 mb-5 font-light max-w-2xl"
+          className="max-w-2xl mb-5 text-xl font-light text-gray-100 md:text-2xl"
         >
           Live with passionate Vietnamese learners. Share your language. Build
           lifelong bonds.
@@ -76,7 +77,7 @@ export function HeroSectionDemo() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="flex items-center gap-8 text-white/90 text-sm mb-10"
+          className="flex items-center gap-8 mb-10 text-sm text-white/90"
         >
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5" />
@@ -95,14 +96,14 @@ export function HeroSectionDemo() {
           transition={{ delay: 0.9, type: "spring", stiffness: 150 }}
           className="cursor-pointer"
         >
-          <Button
-            onClick={scrollToApply}
-            size="lg"
-            className="bg-gradient-to-r hover:scale-95   from-emerald-400 cursor-pointer to-lime-400 hover:from-emerald-500 hover:to-lime-500 text-white font-semibold text-lg px-10 py-7 rounded-full shadow-2xl flex items-center gap-3 transition-all  duration-300 hover:shadow-emerald-400/30"
+          <Link
+             href="https://docs.google.com/forms/"
+             target="_blank"
+            className="flex items-center gap-3 px-10 py-5 font-semibold text-white transition-all duration-300 rounded-full shadow-2xl cursor-pointer text-md bg-gradient-to-r hover:scale-95 from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-emerald-400/30"
           >
             Apply to Stay Free
-            <ArrowDown className="w-5 h-5 animate-bounce cursor-pointer" />
-          </Button>
+            <ArrowDown className="w-5 h-5 cursor-pointer animate-bounce" />
+          </Link>
         </motion.div>
 
         {/* Subtle Hint */}

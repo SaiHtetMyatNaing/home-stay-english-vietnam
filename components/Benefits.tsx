@@ -67,18 +67,18 @@ const Benefits = () => {
 
   return (
     <section id="benefits" className="py-20 bg-gradient-to-br from-muted/30 to-background">
-      <div className="container mx-auto px-4">
+      <div className="container px-4 mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="mb-12 text-center"
         >
           <motion.h2 
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-4xl md:text-5xl font-bold mb-4 text-foreground"
+            className="mb-4 text-4xl font-bold md:text-5xl text-foreground"
           >
             Why Choose Us?
           </motion.h2>
@@ -86,13 +86,13 @@ const Benefits = () => {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="w-20 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mb-6 origin-left"
+            className="w-20 h-1 mx-auto mb-6 origin-left bg-gradient-to-r from-primary to-secondary"
           />
           <motion.p 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+            className="max-w-2xl mx-auto text-lg text-muted-foreground"
           >
             We offer more than just a place to stay. Join our community and discover the benefits 
             of cultural exchange.
@@ -100,7 +100,7 @@ const Benefits = () => {
         </motion.div>
 
         <motion.div 
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+          className="grid max-w-6xl grid-cols-2 gap-4 mx-auto lg:grid-cols-3 sm:gap-6 lg:gap-8"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -110,11 +110,11 @@ const Benefits = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              className="group relative overflow-hidden bg-card/80 backdrop-blur-sm p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-border/50 hover:border-primary/30 hover:-translate-y-2 h-full flex flex-col justify-between"
+              className="relative flex flex-col justify-between h-full p-4 overflow-hidden transition-all duration-500 border shadow-lg group bg-card/80 backdrop-blur-sm sm:p-6 rounded-xl hover:shadow-2xl border-border/50 hover:border-primary/30 hover:-translate-y-2"
             >
               <div className="flex flex-col items-center text-center">
                 <motion.div 
-                  className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-all duration-300"
+                  className="flex items-center justify-center w-16 h-16 mb-4 transition-all duration-300 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 group-hover:bg-primary/20"
                   variants={iconVariants}
                   initial="hidden"
                   whileInView="visible"
@@ -122,14 +122,14 @@ const Benefits = () => {
                 >
                   {benefit.icon}
                 </motion.div>
-                <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors duration-300">
+                <h3 className="mb-3 text-xl font-bold transition-colors duration-300 text-foreground group-hover:text-primary">
                   {benefit.title}
                 </h3>
-                <p className="text-muted-foreground leading-relaxed flex-1">
+                <p className="flex-1 leading-relaxed text-muted-foreground">
                   {benefit.description}
                 </p>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 transition-opacity duration-500 opacity-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent group-hover:opacity-100" />
             </motion.div>
           ))}
         </motion.div>

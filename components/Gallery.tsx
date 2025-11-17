@@ -2,6 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, useInView, Variants } from "framer-motion";
 
+import Image from "next/image";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
+
 const Gallery = () => {
   // 12 images for 4 columns × 3 rows
   const images = [
@@ -74,17 +77,17 @@ const Gallery = () => {
   };
 
   return (
-    <section id="gallery" className="py-20 bg-background overflow-hidden">
-      <div className="container mx-auto px-4">
+    <section id="gallery" className="py-20 overflow-hidden bg-background">
+      <div className="container px-4 mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="mb-12 text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
+          <h2 className="mb-4 text-4xl font-bold md:text-5xl text-foreground">
             Life at English Homestay Vietnam
           </h2>
           <motion.div
@@ -92,39 +95,70 @@ const Gallery = () => {
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="w-20 h-1 bg-primary mx-auto mb-6 origin-left"
+            className="w-20 h-1 mx-auto mb-6 origin-left bg-primary"
           />
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
             See what daily life looks like in our homestay community. These
             moments capture the friendships, learning, and cultural exchange
             that make our program special.
           </p>
         </motion.div>
 
-        {/* Image Grid – 4 columns × 3 rows – **shorter cards** */}
+        {/* Mobile & Tablet Carousel (hidden on desktop) */}
+        <div className="max-w-3xl mx-auto mb-8 lg:hidden">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent>
+              {images.map((image, index) => (
+                <CarouselItem key={index} className="md:basis-1/2">
+                  <div className="relative h-64 overflow-hidden rounded-lg cursor-pointer shadow-card group md:h-72">
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 flex items-end p-4 transition-opacity duration-300 opacity-0 bg-gradient-to-t from-black/70 to-transparent group-hover:opacity-100">
+                      <p className="text-sm font-medium text-white">{image.alt}</p>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-2" />
+            <CarouselNext className="right-2" />
+          </Carousel>
+        </div>
+
+        {/* Desktop Grid – 4 columns × 3 rows (hidden on mobile/tablet) */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto"
+          className="hidden grid-cols-4 gap-4 mx-auto lg:grid max-w-7xl"
         >
           {images.map((image, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
               whileHover="hover"
-              className="relative overflow-hidden rounded-lg shadow-card group cursor-pointer h-48 md:h-56"
+              className="relative h-56 overflow-hidden rounded-lg cursor-pointer shadow-card group"
             >
               <motion.img
                 src={image.src}
                 alt={image.alt}
-                className="w-full h-full object-cover"
+                className="object-cover w-full h-full"
                 variants={hoverVariants}
                 style={{ originX: 0.5, originY: 0.5 }}
               />
-              <div className="absolute inset-0 bg-linear-gradient-to-t from-black/70 to-transparent flex items-end p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <p className="text-white font-medium text-xs md:text-sm">{image.alt}</p>
+              <div className="absolute inset-0 flex items-end p-3 transition-opacity duration-300 opacity-0 bg-gradient-to-t from-black/70 to-transparent group-hover:opacity-100">
+                <p className="text-sm font-medium text-white">{image.alt}</p>
               </div>
             </motion.div>
           ))}
@@ -145,7 +179,7 @@ const Gallery = () => {
               initial={{ opacity: 0 }}
               animate={sectionInView ? { opacity: 1 } : {}}
               transition={{ delay: 0.2 }}
-              className="text-2xl font-semibold mb-4 text-foreground"
+              className="mb-4 text-2xl font-semibold text-foreground"
             >
               Watch Our Story
             </motion.h3>
@@ -153,12 +187,12 @@ const Gallery = () => {
               initial={{ opacity: 0 }}
               animate={sectionInView ? { opacity: 1 } : {}}
               transition={{ delay: 0.3 }}
-              className="text-muted-foreground mb-6"
+              className="mb-6 text-muted-foreground"
             >
               Get a glimpse of the homestay experience through the eyes of our
               volunteers and host families.
             </motion.p>
-            <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-xl">
+            <div className="relative overflow-hidden bg-black rounded-lg shadow-xl aspect-video">
               <iframe
                 ref={iframeRef}
                 className="absolute inset-0 w-full h-full"

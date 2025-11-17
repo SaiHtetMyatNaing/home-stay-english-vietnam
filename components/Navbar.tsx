@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -10,7 +12,6 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [isMounted, setIsMounted] = useState(false);
 
-  // Trigger mount animation
   useEffect(() => setIsMounted(true), []);
 
   useEffect(() => {
@@ -56,34 +57,32 @@ const Navbar = () => {
       animate={{
         paddingTop: isScrolled ? "0.8rem" : "1.5rem",
         paddingBottom: isScrolled ? "0.8rem" : "1.5rem",
+        opacity: 1,
       }}
+      initial={{ opacity : 0}}
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white/90" : "bg-transparent"
+        isScrolled ? "bg-white/90 shadow-lg backdrop-blur-md" : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto px-4">
+      <div className="container px-4 mx-auto">
         <div className="flex items-center justify-between">
 
-          {/* LOGO (IMAGE) + TEXT – BOTH ANIMATE LIKE TEXT ON MOUNT */}
+          {/* LOGO + BRAND TEXT */}
           <button
             onClick={() => scrollToSection("home")}
-            className="flex items-center gap-3 hover:scale-105 transition-all duration-300"
+            className="flex items-center gap-2.5 hover:scale-105 transition-all duration-300"
           >
-
-            {/* LOGO IMAGE – ANIMATES LIKE A "LETTER" */}
+            {/* Logo */}
             <motion.img
               src="logo.svg"
               alt="English Homestay Vietnam Logo"
-              // Initial hidden state
               initial={{ opacity: 0, y: 20 }}
-              // Animate in when mounted
               animate={isMounted ? {
                 opacity: 1,
                 y: 0,
-                // Scroll-based size
-                height: isScrolled ? "2.6rem" : "3.5rem",
-                scale: isScrolled ? 0.9 : 1,
+                height: isScrolled ? "2.3rem" : "2.8rem",
+                scale: isScrolled ? 0.92 : 1,
               } : {}}
               transition={{
                 opacity: { delay: 0.3, duration: 0.5, ease: "easeOut" },
@@ -94,17 +93,14 @@ const Navbar = () => {
               className="w-auto drop-shadow-md"
             />
 
-            {/* BRAND TEXT – LETTER-BY-LETTER */}
-            <motion.span
-              className={`font-black tracking-tight flex overflow-hidden ${
+            {/* BRAND TEXT */}
+            <motion.div
+              className={`font-black tracking-tight flex items-center ${
                 isScrolled ? "text-gray-900" : "text-white"
-              }`}
+              } text-md sm:text-base md:text-lg lg:text-xl xl:text-2xl`}
               initial={{ opacity: 0 }}
-              animate={{
-                opacity: isMounted ? 1 : 0,
-                fontSize: isScrolled ? "1.125rem" : "1.5rem",
-              }}
-              transition={{ opacity: { delay: 0.35, duration: 0.5 } }}
+              animate={{ opacity: isMounted ? 1 : 0 }}
+              transition={{ delay: 0.35, duration: 0.6 }}
             >
               <AnimatePresence>
                 {isMounted &&
@@ -125,12 +121,11 @@ const Navbar = () => {
                     </motion.span>
                   ))}
               </AnimatePresence>
-            </motion.span>
-
+            </motion.div>
           </button>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* DESKTOP NAV - Now hidden at xl and below, shown at xl+ */}
+          <div className="items-center hidden gap-1 xl:flex">
             {navLinks.map((link) => (
               <button
                 key={link.id}
@@ -153,57 +148,100 @@ const Navbar = () => {
               </button>
             ))}
 
-            <Button
-              onClick={() => scrollToSection("apply")}
-              className="ml-4 bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 text-white font-semibold px-6 py-2 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+            <Link
+               href="https://docs.google.com/forms/"
+               target="_blank"
+              className="px-6 py-2 ml-4 font-semibold text-white transition-all duration-200 transform rounded-full shadow-lg bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-xl hover:scale-95"
             >
               Apply Now
-            </Button>
+            </Link>
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            className={`md:hidden p-2 rounded-lg transition-all ${
+          {/* Mobile Toggle - Now shown at md and below */}
+          <Button
+            className={`lg:hidden p-2 rounded-lg transition-all ${
               isScrolled ? "text-gray-800" : "text-white"
             }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={30} /> : <Menu size={30} />}
-          </button>
+          </Button>
         </div>
 
-        {/* Mobile Menu */}
-        <motion.div
-          initial={false}
-          animate={{
-            height: isMobileMenuOpen ? "auto" : 0,
-            opacity: isMobileMenuOpen ? 1 : 0,
-          }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="md:hidden overflow-hidden"
-        >
-          <div className="pt-5 pb-6 space-y-2">
-            {navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => scrollToSection(link.id)}
-                className={`block w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
-                  activeSection === link.id
-                    ? "text-emerald-600 bg-emerald-50"
-                    : "text-gray-700 hover:bg-gray-100"
-                }`}
+        {/* MOBILE MENU - Now shown at md and below */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+              />
+
+              <motion.div
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -100, opacity: 0 }}
+                transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                className="fixed inset-x-0 top-0 z-50 bg-white shadow-2xl lg:hidden"
+                style={{ paddingTop: "max(env(safe-area-inset-top), 1.5rem)" }}
               >
-                {link.label}
-              </button>
-            ))}
-            <Button
-              onClick={() => scrollToSection("apply")}
-              className="w-full mt-3 bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 text-white font-semibold py-3 rounded-xl shadow-md"
-            >
-              Apply Now
-            </Button>
-          </div>
-        </motion.div>
+                <div className="flex items-center justify-between px-6 pt-6 pb-5">
+                  <button onClick={() => scrollToSection("home")} className="flex items-center gap-3">
+                    <Image src="logo.svg" alt="Logo" width="10" height="10" className="w-auto h-9 drop-shadow-md" />
+                    <span className="text-[1.5em] font-black tracking-tight text-gray-900">
+                      Home Stay English Vietnam
+                    </span>
+                  </button>
+                  <Button
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="p-2 transition-colors rounded-full hover:bg-gray-100"
+                  >
+                    <X size={28} className="text-gray-700" />
+                  </Button>
+                </div>
+
+                <div className="container px-6 pb-10 mx-auto">
+                  <div className="space-y-2">
+                    {navLinks.map((link, i) => (
+                      <motion.button
+                        key={link.id}
+                        initial={{ x: -40, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: i * 0.07 }}
+                        onClick={() => scrollToSection(link.id)}
+                        className={`w-full text-left px-6 py-4 rounded-2xl text-lg font-medium transition-all ${
+                          activeSection === link.id
+                            ? "bg-emerald-50 text-emerald-600"
+                            : "text-gray-800 hover:bg-gray-100"
+                        }`}
+                      >
+                        {link.label}
+                      </motion.button>
+                    ))}
+
+                    <motion.div
+                      initial={{ scale: 0.95, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="pt-6"
+                    >
+                      <Link
+                        href="https://docs.google.com/forms/"
+                          target="_blank"
+                        className="w-full text-lg font-bold shadow-xl h-14 rounded-2xl bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500"
+                      >
+                        Apply Now
+                      </Link>
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
       </div>
     </motion.nav>
   );
