@@ -42,6 +42,13 @@ export async function generateMetadata(): Promise<Metadata> {
           alt: 'Foreign teachers and Vietnamese learners laughing together at homestay',
           type: 'image/png',
         },
+        {
+          url: openGraphImage,
+          width: 400,
+          height: 400,
+          alt: 'Foreign teachers and Vietnamese learners laughing together at homestay',
+          type: 'image/png',
+        },
       ],
     },
 
