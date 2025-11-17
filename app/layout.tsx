@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
-  weight: ['500', '700'], 
+  weight: ['500', '700'],
   display: 'swap',
   fallback: ['Arial', 'sans-serif'],
   variable: '--font-montserrat',
@@ -15,131 +15,121 @@ const montserrat = Montserrat({
 const siteUrl = 'https://www.englishhomestayvietnam.com';
 const openGraphImage = `https://ik.imagekit.io/rlw77vgih/opengraph.png`;
 
-export const metadata: Metadata = {
-  // Basic
-  title: {
-    default: 'English Homestay Vietnam – Teach English, Live with Locals, Explore Real Vietnam',
-    template: '%s | English Homestay Vietnam',
-  },
-  description:
-    'Stay for free in Vietnam, teach English 15 hours/week, and immerse yourself in authentic local life. Perfect for travelers who want cultural exchange, free homestay, and meaningful connections.',
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: {
+      default:
+        'English Homestay Vietnam – Teach English, Live with Locals, Explore Real Vietnam',
+      template: '%s | English Homestay Vietnam',
+    },
 
-  // Open Graph / Facebook / WhatsApp
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: siteUrl,
-    siteName: 'English Homestay Vietnam',
-    title: 'Teach. Travel. Connect. Live with Vietnamese Learners',
     description:
-      'Free homestay for international English teachers. Practice English with locals, share daily life, explore Vietnam culture. Apply now!',
-    images: [
-      {
-        url: openGraphImage, // FIXED: Full absolute URL
-        width: 1200,
-        height: 630,
-        alt: 'Foreign teachers and Vietnamese learners laughing together at homestay',
-        type: 'image/png', // Added image type
-      },
-    ],
-  },
+      'Stay for free in Vietnam, teach English 15 hours/week, and immerse yourself in authentic local life. Perfect for travelers who want cultural exchange, free homestay, and meaningful connections.',
 
-  // Twitter / X
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Teach English & Live Free in Vietnam | English Homestay',
-    description:
-      'Free accommodation, cultural exchange, 15 hrs/week teaching. 2 weeks–3 months. Apply now!',
-    images: [openGraphImage], // FIXED: Full absolute URL
-    creator: '@EnglishHomestayVN', 
-  },
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      url: siteUrl,
+      siteName: 'English Homestay Vietnam',
+      title: 'Teach. Travel. Connect. Live with Vietnamese Learners',
+      description:
+        'Free homestay for international English teachers. Practice English with locals, share daily life, explore Vietnam culture. Apply now!',
+      images: [
+        {
+          url: openGraphImage,
+          width: 1200,
+          height: 630,
+          alt: 'Foreign teachers and Vietnamese learners laughing together at homestay',
+          type: 'image/png',
+        },
+      ],
+    },
 
-  // Robots & Verification
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Teach English & Live Free in Vietnam | English Homestay',
+      description:
+        'Free accommodation, cultural exchange, 15 hrs/week teaching. 2 weeks–3 months. Apply now!',
+      images: [openGraphImage],
+      creator: '@EnglishHomestayVN',
+    },
+
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
 
-  // Verification (add your real IDs)
-  verification: {
-    google: 'your-google-site-verification',
-  },
+    verification: {
+      google: 'your-google-site-verification',
+    },
 
-  // Alternates & Manifest
-  alternates: {
-    canonical: siteUrl,
-  },
-  manifest: '/site.webmanifest',
+    alternates: {
+      canonical: siteUrl,
+    },
 
-  // Structured Data (JSON-LD) – Organization
-  other: {
-    'application-ld+json': JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      name: 'English Homestay Vietnam',
-      url: siteUrl,
-      logo: `${siteUrl}/logo.png`,
-      description:
-        'Cultural exchange program offering free homestay for volunteer English teachers in Hanoi, Vietnam.',
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: 'Trâu Quỳ, Gia Lâm',
-        addressLocality: 'Hà Nội',
-        addressCountry: 'VN',
-      },
-      contactPoint: {
-        '@type': 'ContactPoint',
-        email: 'info@englishhomestayvietnam.com',
-        telephone: '+84 968 199 900',
-        contactType: 'Customer Service',
-      },
-      sameAs: [
-        'https://www.facebook.com/profile.php?id=61566361055605',
-        'https://www.instagram.com/englishhomestayvietnam',
-      ],
-    }),
-  },
+    manifest: '/site.webmanifest',
 
-  // Keywords (still used by some crawlers)
-  keywords: [
-    'english homestay vietnam',
-    'teach english vietnam free',
-    'volunteer teaching vietnam',
-    'cultural exchange hanoi',
-    'free accommodation vietnam',
-    'learn vietnamese culture',
-    'english teacher volunteer',
-    'homestay tiếng anh việt nam',
-    'dạy tiếng anh miễn phí ở việt nam',
-    'tình nguyện dạy tiếng anh hà nội',
-    'trao đổi văn hóa homestay',
-    'ở miễn phí dạy tiếng anh',
-    'trải nghiệm văn hóa việt nam',
-    'giáo viên tiếng anh tình nguyện',
-    'homestay gia lâm hà nội',
-  ],
-};
+    other: {
+      'application-ld+json': JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'English Homestay Vietnam',
+        url: siteUrl,
+        logo: `${siteUrl}/logo.png`,
+        description:
+          'Cultural exchange program offering free homestay for volunteer English teachers in Hanoi, Vietnam.',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Trâu Quỳ, Gia Lâm',
+          addressLocality: 'Hà Nội',
+          addressCountry: 'VN',
+        },
+        contactPoint: {
+          '@type': 'ContactPoint',
+          email: 'info@englishhomestayvietnam.com',
+          telephone: '+84 968 199 900',
+          contactType: 'Customer Service',
+        },
+        sameAs: [
+          'https://www.facebook.com/profile.php?id=61566361055605',
+          'https://www.instagram.com/englishhomestayvietnam',
+        ],
+      }),
+    },
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+    keywords: [
+      'english homestay vietnam',
+      'teach english vietnam free',
+      'volunteer teaching vietnam',
+      'cultural exchange hanoi',
+      'free accommodation vietnam',
+      'learn vietnamese culture',
+      'english teacher volunteer',
+      'homestay tiếng anh việt nam',
+      'dạy tiếng anh miễn phí ở việt nam',
+      'tình nguyện dạy tiếng anh hà nội',
+      'trao đổi văn hóa homestay',
+      'ở miễn phí dạy tiếng anh',
+      'trải nghiệm văn hóa việt nam',
+      'giáo viên tiếng anh tình nguyện',
+      'homestay gia lâm hà nội',
+    ],
+  };
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body
-        className={`${montserrat.className} antialiased`}
-        suppressHydrationWarning
-      >
+      <body className={`${montserrat.className} antialiased`} suppressHydrationWarning>
         {children}
-        <Toaster/>
+        <Toaster />
       </body>
     </html>
   );
