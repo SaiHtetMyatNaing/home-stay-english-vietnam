@@ -11,6 +11,8 @@ const montserrat = Montserrat({
   variable: '--font-montserrat',
 });
 
+// IMPORTANT: Use your actual domain
+const siteUrl = 'https://www.englishhomestayvietnam.com';
 
 export const metadata: Metadata = {
   // Basic
@@ -21,21 +23,22 @@ export const metadata: Metadata = {
   description:
     'Stay for free in Vietnam, teach English 15 hours/week, and immerse yourself in authentic local life. Perfect for travelers who want cultural exchange, free homestay, and meaningful connections.',
 
-  // Open Graph / Facebook
+  // Open Graph / Facebook / WhatsApp
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://www.englishhomestayvietnam.com',
+    url: siteUrl,
     siteName: 'English Homestay Vietnam',
     title: 'Teach. Travel. Connect. Live with Vietnamese Learners',
     description:
       'Free homestay for international English teachers. Practice English with locals, share daily life, explore Vietnam culture. Apply now!',
     images: [
       {
-        url: '/opengraph.png', 
+        url: `${siteUrl}/opengraph.png`, // FIXED: Full absolute URL
         width: 1200,
         height: 630,
         alt: 'Foreign teachers and Vietnamese learners laughing together at homestay',
+        type: 'image/png', // Added image type
       },
     ],
   },
@@ -46,7 +49,7 @@ export const metadata: Metadata = {
     title: 'Teach English & Live Free in Vietnam | English Homestay',
     description:
       'Free accommodation, cultural exchange, 15 hrs/week teaching. 2 weeks–3 months. Apply now!',
-    images: ['/opengraph.png'],
+    images: [`${siteUrl}/opengraph.png`], // FIXED: Full absolute URL
     creator: '@EnglishHomestayVN', 
   },
 
@@ -70,7 +73,7 @@ export const metadata: Metadata = {
 
   // Alternates & Manifest
   alternates: {
-    canonical: 'https://www.englishhomestayvietnam.com',
+    canonical: siteUrl,
   },
   manifest: '/site.webmanifest',
 
@@ -80,8 +83,8 @@ export const metadata: Metadata = {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'English Homestay Vietnam',
-      url: 'https://www.englishhomestayvietnam.com',
-      logo: '/logo.png',
+      url: siteUrl,
+      logo: `${siteUrl}/logo.png`,
       description:
         'Cultural exchange program offering free homestay for volunteer English teachers in Hanoi, Vietnam.',
       address: {
@@ -122,6 +125,7 @@ export const metadata: Metadata = {
     'homestay gia lâm hà nội',
   ],
 };
+
 export default function RootLayout({
   children,
 }: Readonly<{
