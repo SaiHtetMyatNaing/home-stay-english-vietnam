@@ -140,7 +140,7 @@ const Navbar = () => {
                 {activeSection === link.id && (
                   <motion.div
                     layoutId="active-underline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-emerald-400 to-lime-400 rounded-full"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-linear-to-r from-emerald-400 to-lime-400 rounded-full"
                     initial={false}
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
@@ -151,7 +151,7 @@ const Navbar = () => {
             <Link
               href="https://docs.google.com/forms/"
               target="_blank"
-              className="px-6 py-2 ml-4 font-semibold text-white transition-all duration-200 transform rounded-full shadow-lg bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-xl hover:scale-95"
+              className="px-6 py-2 ml-4 font-semibold text-white transition-all duration-200 transform rounded-full shadow-lg bg-linear-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-xl hover:scale-95"
             >
               Apply Now
             </Link>
@@ -174,7 +174,7 @@ const Navbar = () => {
             <>
               {/* Backdrop - instant */}
               <div
-                className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+                className="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs lg:hidden"
                 onClick={() => setIsMobileMenuOpen(false)}
               />
 
@@ -218,7 +218,7 @@ const Navbar = () => {
                       <Link
                         href="https://docs.google.com/forms/"
                         target="_blank"
-                        className="flex justify-center w-full p-3 text-lg font-bold rounded-full shadow-xl h-14 bg-gradient-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500"
+                        className="flex justify-center w-full p-3 text-lg font-bold rounded-full shadow-xl h-14 bg-linear-to-r from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500"
                       >
                         Apply Now
                       </Link>

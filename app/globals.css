@@ -1,9 +1,131 @@
-@tailwind base;
+@import 'tailwindcss';
+
+@plugin 'tailwindcss-animate';
+
+@custom-variant dark (&:is(.dark *));
 /* ---break---
 */
 @custom-variant dark (&:is(.dark *));
-@tailwind components;
-@tailwind utilities;
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+}
+
+@theme {
+  --font-sans: Poppins, sans-serif;
+
+  --color-primary: hsl(140 45% 50%);
+  --color-primary-foreground: hsl(30 15% 25%);
+
+  --color-secondary: hsl(35 80% 55%);
+  --color-secondary-foreground: hsl(30 15% 25%);
+
+  --color-background: hsl(40 30% 97%);
+  --color-foreground: hsl(30 15% 25%);
+  --color-card: hsl(40 25% 98%);
+  --color-card-foreground: hsl(30 15% 25%);
+  --color-popover: hsl(40 25% 98%);
+  --color-popover-foreground: hsl(30 15% 25%);
+  --color-muted: hsl(40 20% 92%);
+  --color-muted-foreground: hsl(30 15% 45%);
+  --color-accent: hsl(40 30% 88%);
+  --color-accent-foreground: hsl(30 15% 25%);
+  --color-border: hsl(40 20% 85%);
+  --color-input: hsl(40 20% 92%);
+  --color-ring: hsl(140 45% 50%);
+
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+
+  --color-dark-background: hsl(20 14% 10%);
+  --color-dark-foreground: hsl(35 25% 95%);
+  --color-dark-card: hsl(20 14% 12%);
+  --color-dark-card-foreground: hsl(35 25% 95%);
+  --color-dark-popover: hsl(20 14% 12%);
+  --color-dark-popover-foreground: hsl(35 25% 95%);
+  --color-dark-muted: hsl(20 14% 18%);
+  --color-dark-muted-foreground: hsl(35 25% 65%);
+  --color-dark-accent: hsl(20 14% 18%);
+  --color-dark-accent-foreground: hsl(35 25% 95%);
+  --color-dark-border: hsl(20 14% 18%);
+  --color-dark-input: hsl(20 14% 18%);
+  --color-dark-ring: hsl(140 45% 50%);
+
+  --color-dark-destructive: hsl(0 62.8% 50%);
+  --color-dark-destructive-foreground: hsl(0 0% 98%);
+
+  --radius-lg: 0.5rem;
+  --radius-md: calc(0.5rem - 2px);
+  --radius-sm: calc(0.5rem - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@theme inline {
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+@utility transition-smooth {
+  transition: var(--transition-smooth);
+}
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
@@ -87,59 +209,36 @@ All colors MUST be HSL.
 }
 
 @layer utilities {
-  .shadow-soft {
-    box-shadow: var(--shadow-soft);
-  }
-
-  .shadow-card {
-    box-shadow: var(--shadow-card);
-  }
-
-  .transition-smooth {
-    transition: var(--transition-smooth);
-  }
-}
-
-/* ---break---
+  /* ---break---
 */
 
-:root {
-  --sidebar: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(240 5.3% 26.1%);
-  --sidebar-primary: hsl(240 5.9% 10%);
-  --sidebar-primary-foreground: hsl(0 0% 98%);
-  --sidebar-accent: hsl(240 4.8% 95.9%);
-  --sidebar-accent-foreground: hsl(240 5.9% 10%);
-  --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
-}
+  :root {
+    --sidebar: hsl(0 0% 98%);
+    --sidebar-foreground: hsl(240 5.3% 26.1%);
+    --sidebar-primary: hsl(240 5.9% 10%);
+    --sidebar-primary-foreground: hsl(0 0% 98%);
+    --sidebar-accent: hsl(240 4.8% 95.9%);
+    --sidebar-accent-foreground: hsl(240 5.9% 10%);
+    --sidebar-border: hsl(220 13% 91%);
+    --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  }
 
-/* ---break---
+  /* ---break---
 */
 
-.dark {
-  --sidebar: hsl(240 5.9% 10%);
-  --sidebar-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-primary: hsl(224.3 76.3% 48%);
-  --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(240 3.7% 15.9%);
-  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-border: hsl(240 3.7% 15.9%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
-}
+  .dark {
+    --sidebar: hsl(240 5.9% 10%);
+    --sidebar-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-primary: hsl(224.3 76.3% 48%);
+    --sidebar-primary-foreground: hsl(0 0% 100%);
+    --sidebar-accent: hsl(240 3.7% 15.9%);
+    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-border: hsl(240 3.7% 15.9%);
+    --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  }
 
-/* ---break---
+  /* ---break---
 */
-
-@theme inline {
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 /* ---break---

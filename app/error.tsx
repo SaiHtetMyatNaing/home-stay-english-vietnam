@@ -13,7 +13,7 @@ import {
 
 export default function Error() {
   return (
-    <div className="flex items-center justify-center min-h-screen px-6 bg-gradient-to-br from-red-50 via-white to-orange-50">
+    <div className="flex items-center justify-center min-h-screen px-6 bg-linear-to-br from-red-50 via-white to-orange-50">
       <Card className="w-full max-w-xl mx-auto bg-white border-2 border-gray-200 shadow-none rounded-2xl">
         <div className="flex flex-col items-center justify-center gap-3 pt-12">
           <motion.div
@@ -39,7 +39,7 @@ export default function Error() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <CardTitle className="text-5xl font-extrabold text-transparent bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text">
+            <CardTitle className="text-5xl font-extrabold text-transparent bg-linear-to-r from-red-600 to-orange-600 bg-clip-text">
               Oops! Something Went Wrong
             </CardTitle>
           </motion.div>
@@ -61,7 +61,7 @@ export default function Error() {
             transition={{ delay: 0.6 }}
           >
             <Link href="/">
-              <Button className="inline-flex items-center justify-center gap-3 px-8 py-6 text-base font-semibold text-white transition-all transform border-2 rounded-full shadow-none bg-gradient-to-r from-emerald-400 to-lime-400 hover:scale-105 hover:from-emerald-500 hover:to-lime-500 border-emerald-400">
+              <Button className="inline-flex items-center justify-center gap-3 px-8 py-6 text-base font-semibold text-white transition-all transform border-2 rounded-full shadow-none bg-linear-to-r from-emerald-400 to-lime-400 hover:scale-105 hover:from-emerald-500 hover:to-lime-500 border-emerald-400">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>

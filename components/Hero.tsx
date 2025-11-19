@@ -26,7 +26,7 @@ export function HeroSectionDemo() {
   };
 
   return (
-    <ImagesSlider className="h-[53rem]" images={images}>
+    <ImagesSlider className="h-212" images={images}>
       {/* Dark overlay for better text readability */}
       <div id="home" className="absolute inset-0 z-10 bg-black/30" />
 
@@ -56,7 +56,7 @@ export function HeroSectionDemo() {
           className="mb-6 text-5xl font-bold leading-tight text-white md:text-7xl lg:text-8xl"
         >
           Teach. Travel.{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-lime-400">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-300 to-lime-400">
             Connect.
           </span>
         </motion.h1>
@@ -99,7 +99,7 @@ export function HeroSectionDemo() {
           <Link
              href="https://docs.google.com/forms/"
              target="_blank"
-            className="flex items-center gap-3 px-10 py-5 font-semibold text-white transition-all duration-300 rounded-full shadow-2xl cursor-pointer text-md bg-gradient-to-r hover:scale-95 from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-emerald-400/30"
+            className="flex items-center gap-3 px-10 py-5 font-semibold text-white transition-all duration-300 rounded-full shadow-2xl cursor-pointer text-md bg-linear-to-r hover:scale-95 from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-emerald-400/30"
           >
             Apply to Stay Free
             <ArrowDown className="w-5 h-5 cursor-pointer animate-bounce" />

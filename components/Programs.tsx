@@ -61,7 +61,7 @@ const Programs = () => {
   };
 
   return (
-    <section id="programs" className="py-10 md:py-12 lg:py-16 bg-gradient-to-br from-background to-muted/20">
+    <section id="programs" className="py-10 md:py-12 lg:py-16 bg-linear-to-br from-background to-muted/20">
       <div className="container px-4 mx-auto sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -86,7 +86,7 @@ const Programs = () => {
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="w-16 h-1 mx-auto mb-4 origin-left bg-gradient-to-r from-primary to-secondary"
+            className="w-16 h-1 mx-auto mb-4 origin-left bg-linear-to-r from-primary to-secondary"
           />
 
           <motion.p
@@ -111,7 +111,7 @@ const Programs = () => {
         >
           {programs.map((program, index) => (
             <motion.div key={index} variants={itemVariants} className="group">
-              <Card className="flex flex-col h-full overflow-hidden transition-all duration-500 border-0 rounded-md shadow-lg cursor-pointer hover:shadow-2xl hover:scale-95 bg-card/90 backdrop-blur-sm hover:bg-card/100 group-hover:-translate-y-2">
+              <Card className="flex flex-col h-full overflow-hidden transition-all duration-500 border-0 rounded-md shadow-lg cursor-pointer hover:shadow-2xl hover:scale-95 bg-card/90 backdrop-blur-xs hover:bg-card group-hover:-translate-y-2">
                 {/* Image */}
                 <div className="relative h-40 overflow-hidden sm:h-48 lg:h-52">
                   <motion.img
@@ -122,7 +122,7 @@ const Programs = () => {
                     whileHover={{ scale: 1.15 }}
                     transition={{ duration: 0.8 }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
                   
                   <motion.div
                     className="absolute text-white bottom-3 left-3 drop-shadow-lg"

@@ -56,7 +56,7 @@ export default function NavigationBar() {
                   href={item.href}
                   className={`
                     inline-flex h-10 items-center justify-center rounded-sm px-4 py-2 text-sm font-medium transition-all duration-200
-                    focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2
+                    focus:outline-hidden focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2
                     ${isActive(item.href)
                       ? "underline decoration-2 underline-offset-4"
                       : "hover:bg-gray-100"
@@ -81,7 +81,7 @@ export default function NavigationBar() {
           </Button>
           <Button
             asChild
-            className="rounded-sm bg-[#002947] hover:scale-95 font-semibold shadow-sm transition-all"
+            className="rounded-sm bg-[#002947] hover:scale-95 font-semibold shadow-xs transition-all"
           >
             <Link href="/sign-up">Sign Up</Link>
           </Button>
@@ -164,7 +164,7 @@ export default function NavigationBar() {
                 <Link
                   href="/sign-up"
                   onClick={() => setOpen(false)}
-                  className="flex h-10 w-full items-center justify-center rounded-sm bg-[#002947] px-4 py-2 text-sm font-semibold text-[#f4c542] shadow-sm transition-all"
+                  className="flex h-10 w-full items-center justify-center rounded-sm bg-[#002947] px-4 py-2 text-sm font-semibold text-[#f4c542] shadow-xs transition-all"
                 >
                   Sign Up
                 </Link>

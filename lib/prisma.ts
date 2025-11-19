@@ -1,8 +1,21 @@
-import { PrismaClient } from "@prisma/client"
+// lib/prisma.ts  (or src/lib/prisma.ts)
+import { PrismaClient } from '@prisma/client';
+declare global {
+  // This prevents TypeScript errors and allows attaching prisma to globalThis
+  var prisma: PrismaClient | undefined;
+}
 
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
+// This is the key: use a function + local variable to guarantee singleton
+const prismaClientSingleton = () => {
+  return new PrismaClient();
+};
 
-export const prisma =
-  globalForPrisma.prisma || new PrismaClient()
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+export default prisma = globalForPrisma.prisma ?? prismaClientSingleton();
+
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma;
+}

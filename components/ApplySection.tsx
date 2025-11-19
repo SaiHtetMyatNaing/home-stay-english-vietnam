@@ -52,7 +52,7 @@ const ApplySection = () => {
   return (
     <section id="apply" className="py-20 bg-primary relative overflow-hidden">
       {/* Layered gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/10 to-primary"></div>
+      <div className="absolute inset-0 bg-linear-to-b from-transparent via-primary/10 to-primary"></div>
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-16">
@@ -82,7 +82,7 @@ const ApplySection = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 md:p-10 shadow-2xl mb-8 border border-white/10 relative"
+            className="bg-white/95 backdrop-blur-xs rounded-2xl p-6 md:p-10 shadow-2xl mb-8 border border-white/10 relative"
           >
             <motion.h3
               initial={{ opacity: 0, scale: 0.95 }}
@@ -95,7 +95,7 @@ const ApplySection = () => {
             </motion.h3>
             <div className="relative overflow-hidden">
               {/* Vertical timeline track */}
-              <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-gradient-to-b from-primary/20 via-primary/50 to-primary/20 rounded-full"></div>
+              <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-linear-to-b from-primary/20 via-primary/50 to-primary/20 rounded-full"></div>
               <div className="space-y-8">
                 {steps.map((step, index) => (
                   <motion.div
@@ -104,7 +104,7 @@ const ApplySection = () => {
                     className="relative flex items-start gap-6 group"
                   >
                     {/* Step marker */}
-                    <div className="flex-shrink-0 relative z-10">
+                    <div className="shrink-0 relative z-10">
                       <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-lg group-hover:shadow-xl transition-shadow duration-300 border-2 border-white/20">
                         {step.number}
                       </div>
