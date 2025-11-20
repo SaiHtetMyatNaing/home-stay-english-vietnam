@@ -10,8 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
 export default function NotFound() {
+  const router = useRouter();
   return (
     <div className="flex items-center justify-center min-h-screen px-6 bg-linear-to-br from-emerald-50 via-white to-lime-50">
       <Card className="w-full max-w-xl mx-auto border-none rounded-3xl bg-white/80 backdrop-blur-xs">
@@ -60,14 +62,14 @@ export default function NotFound() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <Link href="/">
-              <Button className="inline-flex items-center justify-center gap-3 px-8 py-6 text-base font-semibold text-white transition-all transform rounded-full shadow-lg bg-linear-to-r from-emerald-400 to-lime-400 hover:scale-105 hover:shadow-2xl hover:from-emerald-500 hover:to-lime-500">
+              <Button 
+              onClick={() => router.back()}
+              className="inline-flex cursor-pointer items-center justify-center gap-3 px-8 py-6 text-base font-semibold text-white transition-all transform rounded-full shadow-lg bg-linear-to-r from-emerald-400 to-lime-400 hover:scale-105 hover:shadow-2xl hover:from-emerald-500 hover:to-lime-500">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
                 <span>Back to Home</span>
               </Button>
-            </Link>
           </motion.div>
         </CardContent>
       </Card>
