@@ -1,19 +1,9 @@
-"use client";
-import { useOne } from "@refinedev/core";
+import React from 'react'
 
 const Page = () => {
-  const {
-    result,
-    query: { isLoading },
-  } = useOne({ resource: "products", id: 1 });
+  return (
+    <div>Admin Page</div>
+  )
+}
 
-  if (isLoading) {
-    return <>Loading...</>;
-  }
-
-  return <>
-  {result?.name}
-  </>;
-};
-
-export default Page;
+export default Page

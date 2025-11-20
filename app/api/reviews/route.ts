@@ -1,20 +1,22 @@
 // app/api/reviews/route.ts
-import { PrismaClient } from '@/app/generated/prisma'
 import { NextResponse } from 'next/server'
-
-const prisma  = new PrismaClient();
+import  prisma  from '@/lib/prisma'
+const validSortFields = ['date', 'rating', 'createdAt', 'id'] as const
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
 
-  // Refine pagination
-  const start = parseInt(searchParams.get('_start') || '0')
-  const end = parseInt(searchParams.get('_end') || '10')
-  const take = end - start
-  const skip = start
+  // Correct pagination (Refine/AntD format)
+  const page = Math.max(1, parseInt(searchParams.get('currentPage') || '1', 10))
+  const pageSize = Math.max(1, Math.min(100, parseInt(searchParams.get('pageSize') || '10', 10)))
+  const skip = (page - 1) * pageSize
+  const take = pageSize
 
-  // Refine sorting
-  const sortField = searchParams.get('_sort') || 'date'
+  // Safe sorting
+  let sortField = searchParams.get('_sort') || 'date'
+  if (!validSortFields.includes(sortField as any)) {
+    sortField = 'date'
+  }
   const sortOrder = searchParams.get('_order') === 'DESC' ? 'desc' : 'asc'
 
   try {
@@ -41,17 +43,15 @@ export async function GET(request: Request) {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        // This header is REQUIRED by Refine
         'X-Total-Count': total.toString(),
-        // Allows the header to be read from frontend
         'Access-Control-Expose-Headers': 'X-Total-Count',
       },
     })
   } catch (error) {
     console.error('Reviews API error:', error)
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    })
+    return NextResponse.json(
+      { error: 'Failed to fetch reviews' },
+      { status: 500 }
+    )
   }
 }

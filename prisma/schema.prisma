@@ -69,20 +69,20 @@ model Verification {
 }
 
 model reviews {
-  id            String   @id @default(cuid())
-  userId       String   @unique  @map("user_id")
-  stayDuration String @map("stay_duration")
-  stayPeriod   String @map("stay_period")
-  rating        Int      @default(5)
-  title         String?
-  nationality   String
-  countryFlag  String @map("country_flag")
-  reviewText   String @map("review_text")
-  approved      Boolean  @default(false)
-  date          DateTime @default(now())
+  id           String   @id @default(cuid())
+  userId       String   @unique @map("user_id")
+  stayDuration String   @map("stay_duration")
+  stayPeriod   String   @map("stay_period")
+  rating       Int      @default(5)
+  title        String?
+  nationality  String
+  countryFlag  String   @map("country_flag")
+  reviewText   String   @map("review_text")
+  approved     Boolean  @default(false)
+  date         DateTime @default(now())
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([approved])
   @@index([date])
