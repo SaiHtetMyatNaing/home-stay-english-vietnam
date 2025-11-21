@@ -35,6 +35,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               name: "reviews",
               list: "/admin/reviews",
               show: "/admin/reviews/show/:id",
+              edit: "/admin/reviews/edit/:id",
               meta: { canDelete: true },
             },
           ]}
