@@ -4,6 +4,9 @@
   import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
   import { Badge } from "@/components/ui/badge";
 
+
+  export const revalidate = 0;
+
   type Review = {
     id: string;
     user: { name: string | null; image: string | null };
@@ -30,11 +33,13 @@
   );
 
   export default async function VolunteerReviews() {
-    // Simple direct fetch – no SWR, no extra dependencies
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/reviews`, {
-      cache: "no-store", // always fresh (or use "force-cache" if you want static)
-      // next: { revalidate: 3600 } // optional: revalidate every hour
-    });
+   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
+                process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 
+                'http://localhost:3000';
+
+const res = await fetch(`${baseUrl}/api/reviews`, {
+  cache: "no-store",
+});
 
     const reviews: Review[] = res.ok ? await res.json() : [];
 
