@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import {useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -31,12 +31,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
-
 import { toast } from "sonner";
-import { auth } from "@/lib/auth";
 import { useSession } from "@/lib/auth-client";
 
 const formSchema = z.object({
@@ -55,41 +52,21 @@ const countries = [
   { name: "United States", flag: "US" },
   { name: "United Kingdom", flag: "GB" },
   { name: "Canada", flag: "CA" },
+  { name: "Vietnam", flag: "VN" },
   { name: "Australia", flag: "AU" },
   { name: "Germany", flag: "DE" },
   { name: "France", flag: "FR" },
-  { name: "Spain", flag: "ES" },
-  { name: "Italy", flag: "IT" },
   { name: "Japan", flag: "JP" },
-  { name: "China", flag: "CN" },
-  { name: "India", flag: "IN" },
-  { name: "Brazil", flag: "BR" },
-  { name: "Mexico", flag: "MX" },
-  { name: "South Korea", flag: "KR" },
-  { name: "Netherlands", flag: "NL" },
-  { name: "Vietnam", flag: "VN" },
   { name: "Thailand", flag: "TH" },
   { name: "Indonesia", flag: "ID" },
-  { name: "Philippines", flag: "PH" },
-  // Add more countries as needed
+  // Add more as needed
 ];
 
-export default function Page() {
-
-  const session = useSession();
+export default function WriteReviewPage() {
+  const { data , isPending } = useSession()
   const router = useRouter();
+  const user = data?.user;
 
-  useEffect(() => {
-    // v4 logic:
-    if (session.data === null) {       // definitely unauthenticated
-      router.push("/sign-in");
-    }
-  }, [session.data, router]);
-
-  if (!session.data?.user) {
-    return null; // redirecting, nothing to render
-  }
-  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOtherCountry, setIsOtherCountry] = useState(false);
 
@@ -108,6 +85,14 @@ export default function Page() {
 
   const rating = form.watch("rating");
 
+  // Auto redirect if not logged in
+  useEffect(() => {
+    if (!isPending && !user) {
+      toast.error("Please sign in to write a review");
+      router.replace("/sign-in?redirectTo=/write-review");
+    }
+  }, [user, isPending, router]);
+
   const handleCountryChange = (value: string) => {
     if (value === "Other") {
       setIsOtherCountry(true);
@@ -115,70 +100,113 @@ export default function Page() {
       form.setValue("countryFlag", "Globe");
     } else {
       setIsOtherCountry(false);
-      form.setValue("nationality", value);
       const country = countries.find((c) => c.name === value);
-      if (country) form.setValue("countryFlag", country.flag);
+      if (country) {
+        form.setValue("nationality", country.name);
+        form.setValue("countryFlag", country.flag);
+      }
     }
   };
 
-  async function onSubmit(values: FormValues) {
+  const onSubmit = async (values: FormValues) => {
+    if (!user) {
+      toast.error("Session expired. Please sign in again.");
+      router.push("/sign-in");
+      return;
+    }
+
     setIsSubmitting(true);
+
     try {
       const res = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          ...values,
+          userId: user.id,
+          userName: user.name ?? "Anonymous",
+          userImage: user.image ?? null,
+        }),
       });
 
-      if (!res.ok) throw new Error("Failed to submit");
+      if (!res.ok) {
+        const error = await res.text();
+        if (error?.includes("already submitted") || error?.includes("already reviewed")) {
+          toast.success("Review already submitted!", {
+            description: "You've already shared your experience. Thank you!",
+          });
+          router.push("/reviews");
+          return;
+        }
 
-      toast.success("Review submitted!", {
-        description: "Thank you! Your review will appear after approval.",
+        // handle other non-OK responses
+        toast.error("Submission failed", {
+          description: error ?? "Please try again.",
+        });
+        return;
+      }
+
+      toast.success("Thank you!", {
+        description: "Your review has been submitted successfully.",
       });
 
       form.reset();
       setIsOtherCountry(false);
+      router.push("/reviews"); // or wherever you want
     } catch (error) {
-      toast.error("Error", {
+      toast.error("Submission failed", {
         description: error instanceof Error ? error.message : "Please try again.",
       });
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // Loading state
+  if (isPending) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
   }
 
+  // If not logged in (after loading), redirect already handled in useEffect
+  if (!user) return null;
+
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full max-w-2xl mx-auto mt-8">
       <CardHeader>
         <CardTitle>Write a Review</CardTitle>
-        <CardDescription>Share your experience to help other guests</CardDescription>
+        <CardDescription>
+          Share your experience to help future volunteers
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+
             {/* Star Rating */}
             <FormField
               control={form.control}
               name="rating"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Overall Rating <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Overall Rating <span className="text-red-500">*</span></FormLabel>
                   <FormControl>
-                    <div className="flex gap-2">
-                      {[1, 2, 3, 4, 5].map((value) => (
+                    <div className="flex gap-3">
+                      {[1, 2, 3, 4, 5].map((star) => (
                         <button
-                          key={value}
+                          key={star}
                           type="button"
-                          onClick={() => field.onChange(value)}
-                          className="transform transition-transform hover:scale-95 focus:outline-none cursor-pointer"
+                          onClick={() => field.onChange(star)}
+                          className="transition-transform hover:scale-110"
                         >
-                          {value <= rating ? (
-                            <StarIcon className="h-11 w-11 text-yellow-400 fill-yellow-400 drop-shadow-sm" />
+                          {star <= rating ? (
+                            <StarIcon className="h-12 w-12 text-yellow-500 fill-yellow-500 drop-shadow" />
                           ) : (
-                            <StarBorderIcon className="h-11 w-11 text-gray-300 dark:text-gray-600" />
+                            <StarBorderIcon className="h-12 w-12 text-gray-400" />
                           )}
                         </button>
                       ))}
@@ -189,7 +217,6 @@ export default function Page() {
               )}
             />
 
-            {/* Title */}
             <FormField
               control={form.control}
               name="title"
@@ -197,28 +224,27 @@ export default function Page() {
                 <FormItem>
                   <FormLabel>Review Title (Optional)</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. Amazing stay with wonderful hosts!" {...field} />
+                    <Input placeholder="e.g. Amazing volunteer experience!" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            {/* Review Text */}
             <FormField
               control={form.control}
               name="reviewText"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Your Review</FormLabel>
+                  <FormLabel>Your Review <span className="text-red-500">*</span></FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Tell us about your experience..."
-                      className="min-h-32 resize-none"
+                      placeholder="Tell us about your stay..."
+                      className="min-h-40 resize-none"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>Minimum 10 characters</FormDescription>
+                  <FormDescription>At least 10 characters</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -230,9 +256,9 @@ export default function Page() {
                 name="stayDuration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Stay Duration</FormLabel>
+                    <FormLabel>Stay Duration <span className="text-red-500">*</span></FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. 4 nights" {...field} />
+                      <Input placeholder="e.g. 2 weeks" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -244,7 +270,7 @@ export default function Page() {
                 name="stayPeriod"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Travel Date</FormLabel>
+                    <FormLabel>When did you stay? <span className="text-red-500">*</span></FormLabel>
                     <FormControl>
                       <Input placeholder="e.g. November 2025" {...field} />
                     </FormControl>
@@ -254,65 +280,52 @@ export default function Page() {
               />
             </div>
 
-            {/* Country / Nationality – Inline Input */}
+            {/* Country */}
             <FormField
               control={form.control}
               name="nationality"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Country / Nationality <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Country / Nationality <span className="text-red-500">*</span></FormLabel>
                   <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-end">
-                    {/* Country Dropdown */}
                     <div className="flex-1 w-full">
-                      <Select
-                        onValueChange={handleCountryChange}
-                        value={isOtherCountry ? "Other" : field.value}
-                      >
+                      <Select onValueChange={handleCountryChange} value={isOtherCountry ? "Other" : field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select your country" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {countries.map((country) => (
-                            <SelectItem key={country.name} value={country.name}>
+                          {countries.map((c) => (
+                            <SelectItem key={c.name} value={c.name}>
                               <div className="flex items-center gap-3">
-                                <span className="text-2xl">{country.flag}</span>
-                                <span>{country.name}</span>
+                                <span className="text-2xl">{c.flag}</span>
+                                <span>{c.name}</span>
                               </div>
                             </SelectItem>
                           ))}
                           <SelectItem value="Other">
                             <div className="flex items-center gap-3">
                               <span className="text-2xl">Globe</span>
-                              <span className="font-medium">Other</span>
+                              <span>Other</span>
                             </div>
                           </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
-                    {/* Inline Input – appears smoothly when "Other" */}
-                    <div
-                      className={`transition-all duration-300 ease-in-out ${
-                        isOtherCountry
-                          ? "opacity-100 w-full sm:w-64"
-                          : "opacity-0 w-0 overflow-hidden"
-                      }`}
-                    >
+                    {isOtherCountry && (
                       <Input
-                        placeholder="Type your country..."
-                        className="h-10"
-                        autoFocus={isOtherCountry}
-                        value={isOtherCountry ? field.value : ""}
+                        placeholder="Enter your country"
+                        className="w-full sm:w-64"
+                        autoFocus
+                        value={field.value}
                         onChange={(e) => {
-                          field.onChange(e.target.value);
+                          field.onChange(e);
                           form.setValue("countryFlag", "Globe");
                         }}
                       />
-                    </div>
+                    )}
                   </div>
                   <FormMessage />
                 </FormItem>

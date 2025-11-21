@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import  prisma  from '@/lib/prisma'
 import z from 'zod';
 import { auth } from '@/lib/auth';
+import { revalidatePath } from 'next/cache';
 
 
 // Validation schema (no userId - it comes from auth)
@@ -136,7 +137,7 @@ export async function POST(req: NextRequest) {
         },
       },
     });
-
+    revalidatePath("/reviews");
     return NextResponse.json(
       {
         success: true,

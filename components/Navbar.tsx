@@ -19,7 +19,7 @@ const Navbar = () => {
       const scrolled = window.scrollY > 50;
       setIsScrolled(scrolled);
 
-      const sections = ["home","about","programs","benefits","gallery","contact","apply"];
+      const sections = ["home","about","programs","benefits","gallery","contact","apply" , 'review'];
       const pos = window.scrollY + 120;
 
       for (const s of sections) {
@@ -46,6 +46,7 @@ const Navbar = () => {
     { label: "Programs", id: "programs" },
     { label: "Benefits", id: "benefits" },
     { label: "Gallery", id: "gallery" },
+    { label: "Review", id: "review" },
     { label: "Contact", id: "contact" },
   ];
 
