@@ -10,7 +10,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   }
 
   try {
-    const review = await prisma.reviews.findUnique({
+    const review = await prisma.review.findUnique({
       where: { id: reviewId },
       include: {
         user: {
@@ -42,7 +42,7 @@ export async function DELETE(
 
   try {
     //  check if review exists first
-    const existingReview = await prisma.reviews.findUnique({
+    const existingReview = await prisma.review.findUnique({
       where: { id: reviewId },
     });
 
@@ -51,7 +51,7 @@ export async function DELETE(
     }
 
     // Perform the deletion
-    await prisma.reviews.delete({
+    await prisma.review.delete({
       where: { id: reviewId },
     });
 

@@ -36,7 +36,7 @@ export async function GET(request: Request) {
 
   try {
     const [reviews, total] = await Promise.all([
-      prisma.reviews.findMany({
+      prisma.review.findMany({
         where: { approved: true },
         include: {
           user: {
@@ -49,7 +49,7 @@ export async function GET(request: Request) {
         skip,
         take,
       }),
-      prisma.reviews.count({
+      prisma.review.count({
         where: { approved: true },
       }),
     ])
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
     const validatedData = createReviewSchema.parse(body);
 
     // Check if user already has a review (due to unique constraint on userId)
-    const existingReview = await prisma.reviews.findUnique({
+    const existingReview = await prisma.review.findUnique({
       where: { userId },
     });
 
@@ -115,7 +115,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Create the review
-    const review = await prisma.reviews.create({
+    const review = await prisma.review.create({
       data: {
         userId, // From authenticated session
         stayDuration: validatedData.stayDuration,
