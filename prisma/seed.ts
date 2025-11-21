@@ -104,7 +104,7 @@ async function main() {
             'Beautiful place in a perfect location. Wi-Fi was a bit slow at times, but nothing major. Highly recommend!',
           ];
 
-      return prisma.reviews.upsert({
+      return prisma.review.upsert({
         where: { userId: user.id },
         update: {},
         create: {

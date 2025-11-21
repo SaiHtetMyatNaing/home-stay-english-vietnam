@@ -18,7 +18,7 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
   accounts      Account[]
-  reviews       reviews?
+  reviews       Review?
   sessions      Session[]
 
   @@map("user")
@@ -68,7 +68,7 @@ model Verification {
   @@map("verification")
 }
 
-model reviews {
+model Review {
   id           String   @id @default(cuid())
   userId       String   @unique @map("user_id")
   stayDuration String   @map("stay_duration")
@@ -80,10 +80,11 @@ model reviews {
   reviewText   String   @map("review_text")
   approved     Boolean  @default(false)
   date         DateTime @default(now())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
 
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("reviews")
   @@index([approved])
   @@index([date])
 }
