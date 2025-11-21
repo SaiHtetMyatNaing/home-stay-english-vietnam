@@ -81,7 +81,7 @@ const Requirements = () => {
                 className="flex gap-4 p-6 bg-background rounded-xl shadow-card hover:shadow-soft transition-smooth border border-primary/20 group"
               >
                 <motion.div 
-                  className="flex-shrink-0 mt-1"
+                  className="shrink-0 mt-1"
                   whileHover={{ scale: 1.1 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
@@ -107,7 +107,7 @@ const Requirements = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-12 p-8 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl text-center border-2 border-primary/20 hover:border-primary/30 transition-colors duration-300"
+            className="mt-12 p-8 bg-linear-to-r from-primary/5 to-secondary/5 rounded-xl text-center border-2 border-primary/20 hover:border-primary/30 transition-colors duration-300"
           >
             <p className="text-xl font-semibold text-foreground mb-3">
               Not sure if you're a good fit?

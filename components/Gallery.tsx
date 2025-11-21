@@ -123,7 +123,7 @@ const Gallery = () => {
                       fill
                       className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 flex items-end p-4 transition-opacity duration-300 opacity-0 bg-gradient-to-t from-black/70 to-transparent group-hover:opacity-100">
+                    <div className="absolute inset-0 flex items-end p-4 transition-opacity duration-300 opacity-0 bg-linear-to-t from-black/70 to-transparent group-hover:opacity-100">
                       <p className="text-sm font-medium text-white">{image.alt}</p>
                     </div>
                   </div>
@@ -157,7 +157,7 @@ const Gallery = () => {
                 variants={hoverVariants}
                 style={{ originX: 0.5, originY: 0.5 }}
               />
-              <div className="absolute inset-0 flex items-end p-3 transition-opacity duration-300 opacity-0 bg-gradient-to-t from-black/70 to-transparent group-hover:opacity-100">
+              <div className="absolute inset-0 flex items-end p-3 transition-opacity duration-300 opacity-0 bg-linear-to-t from-black/70 to-transparent group-hover:opacity-100">
                 <p className="text-sm font-medium text-white">{image.alt}</p>
               </div>
             </motion.div>

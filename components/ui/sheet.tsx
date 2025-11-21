@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { XIcon } from "lucide-react"
@@ -55,7 +53,6 @@ function SheetContent({
   return (
     <SheetPortal>
       <SheetOverlay />
-      <SheetPrimitive.Title data-slot="sheet-title" />
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(

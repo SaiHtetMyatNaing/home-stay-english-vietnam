@@ -86,7 +86,7 @@ const About = () => {
               variants={itemVariants}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
-              className="relative bg-gradient-to-br from-primary/5 to-primary/10 p-1 rounded-xl overflow-hidden"
+              className="relative bg-linear-to-br from-primary/5 to-primary/10 p-1 rounded-xl overflow-hidden"
             >
               <div className="bg-card p-6 rounded-xl border border-primary/20 shadow-lg">
                 <div className="flex items-center gap-3 mb-4">
@@ -142,7 +142,7 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="relative"
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-2xl blur-3xl -z-10 scale-95" />
+            <div className="absolute inset-0 bg-linear-to-tr from-primary/20 to-secondary/20 rounded-2xl blur-3xl -z-10 scale-95" />
             <motion.img
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}

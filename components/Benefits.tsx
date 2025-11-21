@@ -66,7 +66,7 @@ const Benefits = () => {
   };
 
   return (
-    <section id="benefits" className="py-20 bg-gradient-to-br from-muted/30 to-background">
+    <section id="benefits" className="py-20 bg-linear-to-br from-muted/30 to-background">
       <div className="container px-4 mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -86,7 +86,7 @@ const Benefits = () => {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="w-20 h-1 mx-auto mb-6 origin-left bg-gradient-to-r from-primary to-secondary"
+            className="w-20 h-1 mx-auto mb-6 origin-left bg-linear-to-r from-primary to-secondary"
           />
           <motion.p 
             initial={{ opacity: 0, y: 15 }}
@@ -110,11 +110,11 @@ const Benefits = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              className="relative flex flex-col justify-between h-full p-4 overflow-hidden transition-all duration-500 border shadow-lg group bg-card/80 backdrop-blur-sm sm:p-6 rounded-xl hover:shadow-2xl border-border/50 hover:border-primary/30 hover:-translate-y-2"
+              className="relative flex flex-col justify-between h-full p-4 overflow-hidden transition-all duration-500 border shadow-lg group bg-card/80 backdrop-blur-xs sm:p-6 rounded-xl hover:shadow-2xl border-border/50 hover:border-primary/30 hover:-translate-y-2"
             >
               <div className="flex flex-col items-center text-center">
                 <motion.div 
-                  className="flex items-center justify-center w-16 h-16 mb-4 transition-all duration-300 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 group-hover:bg-primary/20"
+                  className="flex items-center justify-center w-16 h-16 mb-4 transition-all duration-300 rounded-full bg-linear-to-br from-primary/10 to-secondary/10 group-hover:bg-primary/20"
                   variants={iconVariants}
                   initial="hidden"
                   whileInView="visible"
@@ -129,7 +129,7 @@ const Benefits = () => {
                   {benefit.description}
                 </p>
               </div>
-              <div className="absolute inset-0 transition-opacity duration-500 opacity-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent group-hover:opacity-100" />
+              <div className="absolute inset-0 transition-opacity duration-500 opacity-0 bg-linear-to-t from-primary/5 via-transparent to-transparent group-hover:opacity-100" />
             </motion.div>
           ))}
         </motion.div>

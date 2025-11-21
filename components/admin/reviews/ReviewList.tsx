@@ -1,0 +1,57 @@
+"use client";
+import React, { Suspense } from "react";
+import { DeleteButton, EditButton, List, ShowButton, useDataGrid } from "@refinedev/mui";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Rating } from "@mui/material";
+
+export default function ReviewList() {
+  const { dataGridProps } = useDataGrid({ resource: "reviews" });
+
+  const columns = React.useMemo<GridColDef[]>(
+    () => [
+      {
+        field: "user.name",
+        headerName: "Name",
+        type: "number",
+        minWidth: 100,
+        align: "left",
+        width: 50,
+        renderCell: ({ row }) => row.user?.name ?? "",
+        flex: 1,
+      },
+      { field: "rating", headerName: "Rating", minWidth: 100 , flex : 1,
+       renderCell: ({ row }) => (
+        <Rating
+              value={row?.rating ?? 0}
+              precision={0.5}
+              readOnly
+              size="large"
+            />
+       ),
+
+      },
+      { field: "reviewText", headerName: "Review", minWidth: 100, flex: 1 },
+      {
+        field: "actions",
+        headerName: "Actions",
+        renderCell: ({ row }) => (
+          <div>
+            <EditButton  hideText size="small" recordItemId={row.id} />
+            <ShowButton  hideText size="small" recordItemId={row.id} />
+            <DeleteButton hideText size="small" recordItemId={row.id} />
+          </div>
+        ),
+        align: "center",
+        headerAlign: "center",
+        flex: 1,
+      },
+    ],
+    []
+  );
+
+  return (
+    <List>
+      <DataGrid {...dataGridProps} columns={columns} />
+    </List>
+  );
+}
