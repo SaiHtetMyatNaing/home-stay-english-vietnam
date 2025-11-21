@@ -10,12 +10,20 @@ import {
 } from "@/components/ui/card";
 import GoogleIcon from "@mui/icons-material/Google"; // MUI Google icon
 import CircularProgress from "@mui/material/CircularProgress"; // MUI loading spinner
-import { signIn } from "@/lib/auth-client";
+import { signIn, useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
 
 export default function Page() {
+
+
+  const session = useSession()
+
+  if(session?.data?.user){
+    toast.success("You are already signed in.")
+    useRouter().push("/")
+  }
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 

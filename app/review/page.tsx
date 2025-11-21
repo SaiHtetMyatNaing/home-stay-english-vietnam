@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -79,9 +79,17 @@ export default function Page() {
   const session = useSession();
   const router = useRouter();
 
-  if(!session){
-    router.push("/sign-in")
+  useEffect(() => {
+    // v4 logic:
+    if (session.data === null) {       // definitely unauthenticated
+      router.push("/sign-in");
+    }
+  }, [session.data, router]);
+
+  if (!session.data?.user) {
+    return null; // redirecting, nothing to render
   }
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOtherCountry, setIsOtherCountry] = useState(false);
 
