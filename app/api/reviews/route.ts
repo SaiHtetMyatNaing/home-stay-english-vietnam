@@ -5,7 +5,6 @@ import z from 'zod';
 import { auth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 
-
 // Validation schema (no userId - it comes from auth)
 const createReviewSchema = z.object({
   stayDuration: z.string().min(1, 'Stay duration is required'),
@@ -18,10 +17,13 @@ const createReviewSchema = z.object({
 });
 const validSortFields = ['date', 'rating', 'createdAt', 'id'] as const
 
-export async function GET(request: Request) {
+export async function GET(
+  request: Request,
+) {
+  // For searchParams, we still need to extract from URL
   const { searchParams } = new URL(request.url)
 
-  // Correct pagination (Refine/AntD format)
+  // Pagination
   const page = Math.max(1, parseInt(searchParams.get('currentPage') || '1', 10))
   const pageSize = Math.max(1, Math.min(100, parseInt(searchParams.get('pageSize') || '10', 10)))
   const skip = (page - 1) * pageSize
@@ -54,10 +56,9 @@ export async function GET(request: Request) {
       }),
     ])
 
-    return new Response(JSON.stringify(reviews), {
+    return NextResponse.json(reviews, {
       status: 200,
       headers: {
-        'Content-Type': 'application/json',
         'X-Total-Count': total.toString(),
         'Access-Control-Expose-Headers': 'X-Total-Count',
       },
