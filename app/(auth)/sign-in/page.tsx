@@ -34,7 +34,7 @@ export default function Page() {
       await signIn.social(
         {
           provider: "google",
-          callbackURL: "/",
+          callbackURL: "/reviews/write-review",
         },
         {
           onError: (ctx) => {
@@ -49,6 +49,7 @@ export default function Page() {
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
+
       setIsLoading(false);
     }
   };

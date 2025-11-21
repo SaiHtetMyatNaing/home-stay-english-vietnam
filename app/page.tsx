@@ -1,6 +1,7 @@
 import About from "@/components/About";
 import Benefits from "@/components/Benefits";
 import Contact from "@/components/Contact";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import Footer from "@/components/Footer";
 import Gallery from "@/components/Gallery";
 import { HeroSectionDemo } from "@/components/Hero";
@@ -18,10 +19,11 @@ const page = () => {
       <Programs />
       <Benefits />
       <Gallery />
-      <Suspense>
-      <VolunteerReviews/>
-
-      </Suspense>
+      <ErrorBoundary fallback={<div className="hidden" />}>
+        <Suspense fallback={<div>Loading reviews...</div>}>
+          <VolunteerReviews />
+        </Suspense>
+      </ErrorBoundary>
       <Contact />
       <Footer />
     </div>
