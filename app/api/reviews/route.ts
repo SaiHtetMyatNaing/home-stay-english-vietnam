@@ -1,6 +1,20 @@
 // app/api/reviews/route.ts
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import  prisma  from '@/lib/prisma'
+import z from 'zod';
+import { auth } from '@/lib/auth';
+
+
+// Validation schema (no userId - it comes from auth)
+const createReviewSchema = z.object({
+  stayDuration: z.string().min(1, 'Stay duration is required'),
+  stayPeriod: z.string().min(1, 'Stay period is required'),
+  rating: z.number().int().min(1).max(5).default(5),
+  title: z.string().optional(),
+  nationality: z.string().min(1, 'Nationality is required'),
+  countryFlag: z.string().min(1, 'Country flag is required'),
+  reviewText: z.string().min(10, 'Review text must be at least 10 characters'),
+});
 const validSortFields = ['date', 'rating', 'createdAt', 'id'] as const
 
 export async function GET(request: Request) {
@@ -53,5 +67,103 @@ export async function GET(request: Request) {
       { error: 'Failed to fetch reviews' },
       { status: 500 }
     )
+  }
+}
+
+
+
+export async function POST(req: NextRequest) {
+  try {
+    // Get userId from auth session (example with next-auth)
+    // Replace this with your actual authentication method
+    const session = await auth.api.getSession({
+      headers: req.headers,
+    }) // or use your auth provider
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Unauthorized - please log in to submit a review',
+        },
+        { status: 401 }
+      );
+    }
+
+    const userId = session.user.id;
+
+    // Parse request body
+    const body = await req.json();
+
+    // Validate request body
+    const validatedData = createReviewSchema.parse(body);
+
+    // Check if user already has a review (due to unique constraint on userId)
+    const existingReview = await prisma.reviews.findUnique({
+      where: { userId },
+    });
+
+    if (existingReview) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'User has already submitted a review',
+        },
+        { status: 409 }
+      );
+    }
+
+    // Create the review
+    const review = await prisma.reviews.create({
+      data: {
+        userId, // From authenticated session
+        stayDuration: validatedData.stayDuration,
+        stayPeriod: validatedData.stayPeriod,
+        rating: validatedData.rating,
+        title: validatedData.title,
+        nationality: validatedData.nationality,
+        countryFlag: validatedData.countryFlag,
+        reviewText: validatedData.reviewText,
+        approved: false, // Reviews need approval by default
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'Review submitted successfully and is pending approval',
+        data: review,
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    // Handle Zod validation errors
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Validation failed',
+        },
+        { status: 400 }
+      );
+    }
+
+    console.error('Error creating review:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'An error occurred while creating the review',
+      },
+      { status: 500 }
+    );
   }
 }
