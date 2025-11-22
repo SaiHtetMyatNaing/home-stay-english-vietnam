@@ -13,20 +13,26 @@ import CircularProgress from "@mui/material/CircularProgress"; // MUI loading sp
 import { signIn, useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Page() {
-
-
-  const session = useSession()
-
-  if(session?.data?.user){
-    toast.success("You are already signed in.")
-    useRouter().push("/")
-  }
-  const [isLoading, setIsLoading] = useState(false);
+  const session = useSession();
   const router = useRouter();
 
+  // All hooks at the top — always called in same order
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Redirect if already signed in
+  useEffect(() => {
+    if (session?.data?.user) {
+      toast.success("You are already signed in.");
+      router.push("/");
+    }
+  }, [session?.data?.user, router]);
+
+  if (session?.data?.user) {
+    return null; 
+  }
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
 
@@ -49,7 +55,6 @@ export default function Page() {
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
-
       setIsLoading(false);
     }
   };

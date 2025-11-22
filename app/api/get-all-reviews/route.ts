@@ -2,22 +2,18 @@ import prisma from "@/lib/prisma"
 import { NextResponse } from "next/server"
 
 const validSortFields = ['date', 'rating', 'createdAt', 'id'] as const
+type SortField = typeof validSortFields[number]
 
-export async function GET(
-  request: Request,
-) {
-  // For searchParams, we still need to extract from URL
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
 
-  // Pagination
   const page = Math.max(1, parseInt(searchParams.get('currentPage') || '1', 10))
   const pageSize = Math.max(1, Math.min(100, parseInt(searchParams.get('pageSize') || '10', 10)))
   const skip = (page - 1) * pageSize
   const take = pageSize
 
-  // Safe sorting
-  let sortField = searchParams.get('_sort') || 'date'
-  if (!validSortFields.includes(sortField as any)) {
+  let sortField: SortField = (searchParams.get('_sort') as SortField) || 'date'
+  if (!validSortFields.includes(sortField)) {
     sortField = 'date'
   }
   const sortOrder = searchParams.get('_order') === 'DESC' ? 'desc' : 'asc'
@@ -25,14 +21,20 @@ export async function GET(
   try {
     const [reviews, total] = await Promise.all([
       prisma.review.findMany({
+        where: { approved: true }, // ← Also move this here for consistency
         include: {
           user: {
             select: { name: true, image: true, email: true },
           },
         },
-        orderBy: {
-          [sortField]: sortOrder,
-        },
+        orderBy:
+          sortField === 'rating'
+            ? { rating: sortOrder }
+            : sortField === 'createdAt'
+            ? { createdAt: sortOrder }
+            : sortField === 'id'
+            ? { id: sortOrder }
+            : { date: sortOrder }, 
         skip,
         take,
       }),
