@@ -8,17 +8,27 @@ import {
   useDataGrid,
 } from "@refinedev/mui";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Chip, Rating } from "@mui/material";
+import { Avatar, Chip, Rating } from "@mui/material";
 
 export default function ReviewList() {
   const { dataGridProps } = useDataGrid({ resource: "get-all-reviews" });
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
+       {
+        field: "Avatar",
+        headerName: "Avatar",
+        type: "string",
+        minWidth: 100,
+        align: "left",
+        width: 50,
+        renderCell: ({ row }) => <Avatar src={row.user?.image} alt={row.user?.name} />,
+        flex: 1,
+      },
       {
         field: "Name",
         headerName: "Name",
-        type: "number",
+        type: "string",
         minWidth: 100,
         align: "left",
         width: 50,
@@ -60,15 +70,14 @@ export default function ReviewList() {
           />
         ),
       },
-
       {
         field: "actions",
         headerName: "Actions",
         renderCell: ({ row }) => (
           <div>
-            <EditButton hideText size="small" recordItemId={row.id} />
-            <ShowButton hideText size="small" recordItemId={row.id} />
-            <DeleteButton hideText size="small" recordItemId={row.id} />
+            <EditButton resource="get-all-reviews" hideText size="small" recordItemId={row.id} />
+            <ShowButton resource="get-all-reviews" hideText size="small" recordItemId={row.id} />
+            <DeleteButton resource="get-all-reviews" hideText size="small" recordItemId={row.id} />
           </div>
         ),
         align: "center",

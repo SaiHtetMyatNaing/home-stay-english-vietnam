@@ -8,7 +8,6 @@
     MarkdownField,
   } from "@refinedev/mui";
   import { Stack, Typography, Box, Divider, Rating, Avatar } from "@mui/material";
-  import { Suspense } from "react";
 
   type IReview = {
     id: string;

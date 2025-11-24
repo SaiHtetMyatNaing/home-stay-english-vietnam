@@ -36,7 +36,7 @@ export default function ReviewEdit() {
     formState: { errors },
   } = useForm<IReview>({
     refineCoreProps: {
-      resource: "reviews",
+      resource: "get-all-reviews",
       action: "edit",
       id 
     },

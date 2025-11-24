@@ -34,8 +34,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           routerProvider={routerProvider}
           resources={[
             {
-              name: "reviews",
-              list: "/admin/get-all-reviews",
+              name: "get-all-reviews",
+              list: "/admin/reviews",
               show: "/admin/reviews/show/:id",
               edit: "/admin/reviews/edit/:id",
               meta: { canDelete: true },
