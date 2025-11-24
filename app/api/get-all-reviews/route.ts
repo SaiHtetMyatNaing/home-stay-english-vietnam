@@ -21,7 +21,6 @@ export async function GET(request: Request) {
   try {
     const [reviews, total] = await Promise.all([
       prisma.review.findMany({
-        where: { approved: true }, // ← Also move this here for consistency
         include: {
           user: {
             select: { name: true, image: true, email: true },
