@@ -10,7 +10,6 @@ A comprehensive platform for managing and reviewing homestays, bridging English 
 - **Review System**: Detailed review submission with ratings, text, and nationality indicators.
 - **Admin Dashboard**: Powerful admin interface built with Refine for managing reviews, users, and content.
 - **Responsive Design**: Modern, responsive UI built with Tailwind CSS and Radix UI primitives.
-- **Internationalization Support**: Designed to support English and Vietnamese contexts.
 
 ## 🛠️ Tech Stack
 
@@ -22,7 +21,6 @@ A comprehensive platform for managing and reviewing homestays, bridging English 
 - **UI Components**: [Radix UI](https://www.radix-ui.com/), [Shadcn UI](https://ui.shadcn.com/)
 - **Admin Framework**: [Refine](https://refine.dev/)
 - **Authentication**: [Better Auth](https://better-auth.com/)
-- **State Management**: [TanStack Query](https://tanstack.com/query/latest)
 
 ## 🏁 Getting Started
 
@@ -38,7 +36,7 @@ Follow these steps to get the project running on your local machine.
 1.  **Clone the repository**
     ```bash
     git clone <repository-url>
-    cd english-vietnam-homestay
+    cd english-homestay-vietnam
     ```
 
 2.  **Install dependencies**

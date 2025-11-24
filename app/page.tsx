@@ -8,6 +8,7 @@ import { HeroSectionDemo } from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import Programs from "@/components/Programs";
 import VolunteerReviews from "@/components/VolunteerReview";
+import VolunteerReviewsSkeleton from "@/components/VolunteerReviewsSkeleton";
 import { Suspense } from "react";
 
 const page = () => {
@@ -20,7 +21,7 @@ const page = () => {
       <Benefits />
       <Gallery />
       <ErrorBoundary fallback={<div className="hidden" />}>
-        <Suspense fallback={<div>Loading reviews...</div>}>
+        <Suspense fallback={<VolunteerReviewsSkeleton />}>
           <VolunteerReviews />
         </Suspense>
       </ErrorBoundary>
