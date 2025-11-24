@@ -37,7 +37,6 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { toast } from "sonner";
 import { useSession } from "@/lib/auth-client";
 import { Home, BookOpen } from "lucide-react";
-import { Spinner } from "@/components/ui/spinner";
 
 const formSchema = z.object({
   stayDuration: z.string().min(1, "Please enter stay duration"),
@@ -52,24 +51,25 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const countries = [
-  { name: "United States", flag: "🇺🇸" },
-  { name: "United Kingdom", flag: "🇬🇧" },
-  { name: "Canada", flag: "🇨🇦" },
-  { name: "Vietnam", flag: "🇻🇳" },
-  { name: "Australia", flag: "🇦🇺" },
-  { name: "Germany", flag: "🇩🇪" },
-  { name: "France", flag: "🇫🇷" },
-  { name: "Japan", flag: "🇯🇵" },
-  { name: "Thailand", flag: "🇹🇭" },
-  { name: "Indonesia", flag: "🇮🇩" },
-  // Add more as needed
+  { name: "United States", flag: "United States" },
+  { name: "United Kingdom", flag: "United Kingdom" },
+  { name: "Canada", flag: "Canada" },
+  { name: "Vietnam", flag: "Vietnam" },
+  { name: "Australia", flag: "Australia" },
+  { name: "Germany", flag: "Germany" },
+  { name: "France", flag: "France" },
+  { name: "Japan", flag: "Japan" },
+  { name: "Thailand", flag: "Thailand" },
+  { name: "Indonesia", flag: "Indonesia" },
 ];
 
 export default function WriteReviewPage() {
-  const { data , isPending } = useSession()
   const router = useRouter();
-  const user = data?.user;
+  const { data: session, isPending: sessionLoading } = useSession();
+  const user = session?.user;
 
+  const [isCheckingReview, setIsCheckingReview] = useState(true);
+  const [hasReviewed, setHasReviewed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOtherCountry, setIsOtherCountry] = useState(false);
 
@@ -88,19 +88,43 @@ export default function WriteReviewPage() {
 
   const rating = form.watch("rating");
 
-  // Auto redirect if not logged in
+  // Redirect if not logged in
   useEffect(() => {
-    if (!isPending && !user) {
+    if (!sessionLoading && !user) {
       toast.error("Please sign in to write a review");
-      router.replace("/sign-in?redirectTo=/write-review");
+      router.replace("/sign-in?redirectTo=/reviews/write-review");
     }
-  }, [user, isPending, router]);
+  }, [user, sessionLoading, router]);
+
+  // Check if user already submitted a review
+  useEffect(() => {
+    if (!user) return;
+
+    const checkExisting = async () => {
+      try {
+        const res = await fetch(`/api/reviews/exists?userId=${user.id}`);
+        const data = await res.json();
+
+        if (data.exists) {
+          setHasReviewed(true);
+          toast.success("You've already shared your experience! Thank you");
+          router.replace("/reviews/thank-you");
+        }
+      } catch (err) {
+        console.error("Failed to check review status");
+      } finally {
+        setIsCheckingReview(false);
+      }
+    };
+
+    checkExisting();
+  }, [user, router]);
 
   const handleCountryChange = (value: string) => {
     if (value === "Other") {
       setIsOtherCountry(true);
       form.setValue("nationality", "");
-      form.setValue("countryFlag", "🌍");
+      form.setValue("countryFlag", "Earth");
     } else {
       setIsOtherCountry(false);
       const country = countries.find((c) => c.name === value);
@@ -112,11 +136,7 @@ export default function WriteReviewPage() {
   };
 
   const onSubmit = async (values: FormValues) => {
-    if (!user) {
-      toast.error("Session expired. Please sign in again.");
-      router.push("/sign-in");
-      return;
-    }
+    if (!user) return;
 
     setIsSubmitting(true);
 
@@ -134,65 +154,52 @@ export default function WriteReviewPage() {
 
       if (!res.ok) {
         const error = await res.text();
-        if (error?.includes("already submitted") || error?.includes("already reviewed")) {
-          toast.success("Review already submitted!", {
-            description: "You've already shared your experience. Thank you!",
-          });
-          router.push("/reviews");
+        if (error.includes("already")) {
+          toast.success("You've already submitted a review!");
+          router.push("/reviews/thank-you");
           return;
         }
-
-        // handle other non-OK responses
-        toast.error("Submission failed", {
-          description: error ?? "Please try again.",
-        });
-        return;
+        throw new Error(error);
       }
 
       toast.success("Thank you!", {
         description: "Your review has been submitted successfully.",
       });
 
-      form.reset();
-      setIsOtherCountry(false);
-      router.push("/reviews");
+      router.push("/reviews/thank-you");
     } catch (error) {
       toast.error("Submission failed", {
-        description: error instanceof Error ? error.message : "Please try again.",
+        description: "Please try again later.",
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Loading state
-  if (isPending) {
+  // Loading states
+  if (sessionLoading || isCheckingReview) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-         <Spinner/>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-[#46b96c]"></div>
       </div>
     );
   }
 
-  // If not logged in (after loading), redirect already handled in useEffect
-  if (!user) return null;
+  if (!user || hasReviewed) {
+    return null; // Redirect already happened
+  }
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-8 px-4 py-10">
-     
-
       <Card>
         <CardHeader>
           <CardTitle>Write a Review</CardTitle>
-          <CardDescription>
-            Share your experience to help future volunteers
-          </CardDescription>
+          <CardDescription>Share your experience to help future volunteers</CardDescription>
         </CardHeader>
 
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-
               {/* Star Rating */}
               <FormField
                 control={form.control}
@@ -223,6 +230,7 @@ export default function WriteReviewPage() {
                 )}
               />
 
+              {/* Title */}
               <FormField
                 control={form.control}
                 name="title"
@@ -237,6 +245,7 @@ export default function WriteReviewPage() {
                 )}
               />
 
+              {/* Review Text */}
               <FormField
                 control={form.control}
                 name="reviewText"
@@ -256,6 +265,7 @@ export default function WriteReviewPage() {
                 )}
               />
 
+              {/* Stay Duration & Period */}
               <div className="grid gap-4 sm:grid-cols-2">
                 <FormField
                   control={form.control}
@@ -270,7 +280,6 @@ export default function WriteReviewPage() {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="stayPeriod"
@@ -286,13 +295,13 @@ export default function WriteReviewPage() {
                 />
               </div>
 
-              {/* Country */}
+              {/* Country Selector */}
               <FormField
                 control={form.control}
                 name="nationality"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Country / Nationality <span className="text-red-500">*</span></FormLabel>
+                    <FormLabel>Country / Nationality <span className="text-red- 500">*</span></FormLabel>
                     <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-end">
                       <div className="flex-1 w-full">
                         <Select onValueChange={handleCountryChange} value={isOtherCountry ? "Other" : field.value}>
@@ -312,7 +321,7 @@ export default function WriteReviewPage() {
                             ))}
                             <SelectItem value="Other">
                               <div className="flex items-center gap-3">
-                                <span className="text-2xl">🌍</span>
+                                <span className="text-2xl">Earth</span>
                                 <span>Other</span>
                               </div>
                             </SelectItem>
@@ -328,7 +337,7 @@ export default function WriteReviewPage() {
                           value={field.value}
                           onChange={(e) => {
                             field.onChange(e);
-                            form.setValue("countryFlag", "🌍");
+                            form.setValue("countryFlag", "Earth");
                           }}
                         />
                       )}
@@ -350,7 +359,8 @@ export default function WriteReviewPage() {
           </Form>
         </CardContent>
       </Card>
-       {/* Navigation Buttons */}
+
+      {/* Navigation */}
       <div className="flex gap-3 mt-6 w-full justify-between">
         <Button asChild variant="outline" className="border-[#46b96c] text-[#46b96c] hover:bg-[#46b96c]/5">
           <Link href="/">

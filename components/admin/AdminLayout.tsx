@@ -70,6 +70,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         <List disablePadding>
           <ListItem disablePadding>
             <ListItemButton
+            href="/"
               sx={{
                 minHeight: 48,
                 borderRadius: open ? 3 : "50%",

@@ -79,11 +79,11 @@ export default function ReviewEdit() {
               rules={{ required: "Rating is required" }}
               render={({ field }) => (
                 <Rating
+                  readOnly
                   {...field}
                   value={field.value ?? 0}
                   precision={0.5}
                   size="large"
-                  onChange={(_, value) => field.onChange(value ?? 0)}
                 />
               )}
             />
@@ -113,7 +113,6 @@ export default function ReviewEdit() {
           <MuiTextField
             label="Review ID"
             value={record.id}
-            InputProps={{ readOnly: true }}
             sx={{ fontFamily: "monospace", fontWeight: 500 }}
             fullWidth
           />
