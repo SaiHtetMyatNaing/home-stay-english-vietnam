@@ -1,6 +1,6 @@
 # English Homestay Vietnam
 
-![English Vietnam Homestay](/opengraph.png)
+![English Vietnam Homestay](/public/opengraph.png)
 
 A comprehensive platform for managing and reviewing homestays, bridging English and Vietnamese speakers. This application provides a seamless experience for users to find, review, and manage homestay bookings, featuring a robust admin dashboard for platform management.
 
