@@ -27,20 +27,13 @@ export async function GET(request: Request) {
             select: { name: true, image: true, email: true },
           },
         },
-        orderBy:
-          sortField === 'rating'
-            ? { rating: sortOrder }
-            : sortField === 'createdAt'
-            ? { createdAt: sortOrder }
-            : sortField === 'id'
-            ? { id: sortOrder }
-            : { date: sortOrder }, 
+        orderBy: {
+          [sortField]: sortOrder,
+        },
         skip,
         take,
       }),
-      prisma.review.count({
-        where: { approved: true },
-      }),
+      prisma.review.count(),
     ])
 
     return NextResponse.json(reviews, {
