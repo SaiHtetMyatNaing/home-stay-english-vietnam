@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 import {
   Box,
   Drawer,
@@ -17,8 +16,7 @@ import {
   ListItemText,
   IconButton,
   Avatar,
-  Divider,
-  useTheme,
+  alpha,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -42,141 +40,170 @@ const menuItems = [
 ];
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
-  const theme = useTheme();
   const pathname = usePathname();
   const [open, setOpen] = useState(true);
 
-  const toggleDrawer = () => setOpen(!open);
+  const cleanPath = pathname.split("?")[0];
+  const activePath = menuItems.find(item => item.path === cleanPath)?.path || "/admin";
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "grey.50" }}>
-      {/* Sidebar Drawer */}
+    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default" , shadow :"none"}}>
+      {/* Sidebar */}
       <Drawer
         variant="permanent"
         open={open}
         sx={{
-          width: open ? drawerWidth : 65,
+          width: open ? drawerWidth : 72,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: open ? drawerWidth : 65,
-            transition: theme.transitions.create("width", {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
+            width: open ? drawerWidth : 72,
+            borderRight: "1px solid",
+            borderColor: "divider",
+            bgcolor: "background.paper",
             overflowX: "hidden",
-            bgcolor: "primary.main",
-            color: "white",
+            boxShadow: "none",
+            transition: "width 0.28s cubic-bezier(0.4, 0, 0.2, 1)",
           },
         }}
       >
-        <Toolbar>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              flexGrow: 1,
-              ml: open ? 0 : -1,
-            }}
-          >
-            {open ? (
-              <Typography variant="h6">English Homestay VN</Typography>
-            ) : (
-              <ListItemIcon
-                sx={{
-                  color: "white",
-                  minWidth: 20,
-                  justifyContent: "center",
-                  justifyItems: "center",
-                }}
-              >
-                <Image src="/logo.svg" alt="Logo" width={45} height={45} />
-              </ListItemIcon>
-            )}
-          </Box>
-        </Toolbar>
+        {/* Logo / Title - Same height & style as menu items */}
+        <List disablePadding>
+          <ListItem disablePadding>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                borderRadius: open ? 3 : "50%",
+                mx: open ? 2 : 1.5,
+                py: 1.5,
+                px: open ? 2.5 : 0,
+                gap: open ? 3 : 0,
+                justifyContent: open ? "flex-start" : "center",
+                transition: "all 0.22s ease",
+                bgcolor: "transparent",
+                "&:hover": { bgcolor: alpha("#000", 0.06) },
+              }}
+            >
+              {open ? (
+                <Typography
+                  variant="h6"
+                  fontWeight={800}
+                  letterSpacing="-0.5px"
+                  color="primary"
+                  sx={{ fontSize: "1.35rem" }}
+                >
+                  English Homestay Vietnam
+                </Typography>
+              ) : (
+                <Image
+                  src="/logo.svg"
+                  alt="Logo"
+                  width={32}
+                  height={32}
+                  style={{
+                    borderRadius: 8,
+                  }}
+                />
+              )}
+            </ListItemButton>
+          </ListItem>
+        </List>
 
-        <Divider sx={{ bgcolor: "rgba(255,255,255,0.2)" }} />
+        {/* Navigation - Consistent with logo */}
+        <List sx={{ px: open ? 2 : 0, pt: 1 }}>
+          {menuItems.map((item) => {
+            const isActive = activePath === item.path;
 
-        <List>
-          {menuItems.map((item) => (
-            <ListItem key={item.text} disablePadding>
-              <ListItemButton
-                component={Link}
-                href={item.path}
-                selected={pathname === item.path}
-                sx={{
-                  minHeight: 48,
-                  px: 2.5,
-                  "&.Mui-selected": {
-                    bgcolor: "rgba(255,255,255,0.2)",
-                    "&:hover": { bgcolor: "rgba(255,255,255,0.3)" },
-                  },
-                }}
-              >
-                <ListItemIcon
+            return (
+              <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
+                <ListItemButton
+                  component={Link}
+                  href={item.path}
                   sx={{
-                    color: "white",
-                    minWidth: open ? 40 : "100%",
-                    justifyContent: "center",
+                    minHeight: 48,
+                    borderRadius: open ? 3 : "50%",
+                    mx: open ? 0 : 1.5,
+                    py: 1.5,
+                    px: open ? 2.5 : 0,
+                    gap: open ? 3 : 0,
+                    justifyContent: open ? "flex-start" : "center",
+                    position: "relative",
+                    transition: "all 0.22s ease",
+
+                    bgcolor: isActive
+                      ? alpha("#46b96c", open ? 0.08 : 0.12)
+                      : "transparent",
+                    color: isActive ? "primary.main" : "text.secondary",
+                    fontWeight: isActive ? 600 : 500,
+
+                    "&:hover": {
+                      bgcolor: isActive
+                        ? alpha("#46b96c", open ? 0.14 : 0.18)
+                        : alpha("#000", 0.06),
+                    },
+
+                    "& .MuiListItemIcon-root": {
+                      color: isActive ? "primary.main" : "text.secondary",
+                      minWidth: 0,
+                      fontSize: "1.35rem",
+                    },
                   }}
                 >
-                  {item.icon}
-                </ListItemIcon>
-                {open && <ListItemText primary={item.text} />}
-              </ListItemButton>
-            </ListItem>
-          ))}
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  {open && <ListItemText primary={item.text} />}
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
         </List>
       </Drawer>
 
       {/* Main Content */}
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
-      >
-        {/* Top Bar */}
+      <Box component="main" sx={{ flexGrow: 1 }}>
         <AppBar
-          position="static"
+          position="fixed"
           elevation={0}
           sx={{
-            bgcolor: "white",
+            bgcolor: "background.paper",
             color: "text.primary",
             borderBottom: "1px solid",
             borderColor: "divider",
+            backdropFilter: "blur(12px)",
+            boxShadow: "none",
+            ml: `${open ? drawerWidth : 72}px`,
+            width: `calc(100% - ${open ? drawerWidth : 72}px)`,
+            transition: "all 0.28s cubic-bezier(0.4, 0, 0.2, 1)",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
           }}
         >
-          <Toolbar>
+          <Toolbar sx={{ minHeight: 70 }}>
             <IconButton
-              edge="start"
-              color="inherit"
-              onClick={toggleDrawer}
-              sx={{ mr: 2 }}
+              onClick={() => setOpen(!open)}
+              sx={{
+                mr: 2,
+                color: "primary.main",
+                bgcolor: alpha("#46b96c", 0.1),
+                "&:hover": { bgcolor: alpha("#46b96c", 0.18) },
+              }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              Admin Dashboard
-            </Typography>
-            <Avatar alt="Admin" src="/avatar.jpg" />
+
+            <Box sx={{ flexGrow: 1 }} />
+
+            <Avatar
+              src="/avatar.jpg"
+              sx={{
+                width: 40,
+                height: 40,
+                border: "3px solid",
+                borderColor: "primary.main",
+              }}
+            />
           </Toolbar>
         </AppBar>
 
-        {/* Page Content */}
-        <Box sx={{ flexGrow: 1, p: { xs: 2, md: 3 } }}>{children}</Box>
-
-        {/* Footer */}
-        <Box
-          sx={{
-            bgcolor: "white",
-            p: 2,
-            textAlign: "center",
-            borderTop: "1px solid",
-            borderColor: "divider",
-          }}
-        >
-          <Typography variant="body2" color="text.secondary">
-            © 2025 English Homestay Vietnam — Admin Panel
-          </Typography>
+        <Box sx={{ pt: "70px", p: { xs: 3, md: 4 } }}>
+          {children}
         </Box>
       </Box>
     </Box>
