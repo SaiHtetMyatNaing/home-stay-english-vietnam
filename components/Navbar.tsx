@@ -122,23 +122,13 @@ const Navbar = () => {
 
             {/* Mobile Toggle – Clean & Reliable */}
             <button
-              onClick={() => setIsMobileMenuOpen(v => !v)}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`lg:hidden p-2 rounded-lg transition-colors ${
                 isScrolled ? "text-gray-800" : "text-white"
               }`}
               aria-label="Toggle menu"
             >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={isMobileMenuOpen ? "close" : "open"}
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-                </motion.div>
-              </AnimatePresence>
+              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
         </div>
@@ -157,10 +147,10 @@ const Navbar = () => {
             />
 
             <motion.div
-              initial={{ y: -100 }}
+              initial={{ y: "-100%" }}
               animate={{ y: 0 }}
-              exit={{ y: -100 }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              exit={{ y: "-100%", transition: { duration: 0.3, ease: "easeInOut" } }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed top-0 left-0 right-0 bg-white shadow-2xl z-50"
               style={{ paddingTop: "max(env(safe-area-inset-top), 1rem)" }}
             >
