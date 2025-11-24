@@ -8,7 +8,7 @@ import GlobalStyles from "@mui/material/GlobalStyles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = process.env.NODE_ENV === "development" ? "http://localhost:3000/api" : "https://www.englishhomestayvietnam.com/api";
 
 const theme = createTheme({
   palette: {

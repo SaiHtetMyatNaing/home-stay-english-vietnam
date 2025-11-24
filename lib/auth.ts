@@ -1,26 +1,44 @@
-import { PrismaClient } from "@/app/generated/prisma/client";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
-// If your Prisma file is located elsewhere, you can change the path
+import prisma from "./prisma";
+import { defaultStatements, adminAc } from "better-auth/plugins/admin/access";
+import { createAccessControl } from "better-auth/plugins/access";
 
-const prisma = new PrismaClient();
+const statement = {
+  ...defaultStatements,
+  review: ["create", "view", "approve", "delete"],
+  dashboard: ["view", "manage"]
+} as const;
+
+const ac = createAccessControl(statement)
+
+export const user = ac.newRole({
+  review: ["create", "view"],
+})
+
+export const admin = ac.newRole({
+  review: ["create", "view", "approve"],
+  dashboard: ['view', 'manage'],
+  ...adminAc.statements,
+})
+
+export const superadmin = ac.newRole({
+  review: ["create", "view", "approve", "delete"],
+  dashboard: ["view", "manage"],
+  ...adminAc.statements,
+});
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: "postgresql", 
+    provider: "postgresql",
   }),
-
   socialProviders: {
-        google: { 
-            clientId: process.env.GOOGLE_CLIENT_ID as string, 
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
-        }, 
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
-
-  emailAndPassword: {
-    enabled: true,
   },
-  trustedOrigins: ["http://localhost:3000", "https://home-stay-english-vietnam.vercel.app"],
+  trustedOrigins: ["http://localhost:3000", "https://home-stay-english-vietnam.vercel.app", "https://www.englishhomestayvietnam.com/"],
   plugins: [nextCookies()]
-
 });
