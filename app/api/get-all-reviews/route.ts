@@ -1,4 +1,6 @@
+import { auth } from "@/lib/auth"
 import prisma from "@/lib/prisma"
+import { headers } from "next/headers"
 import { NextResponse } from "next/server"
 
 const validSortFields = ['date', 'rating', 'createdAt', 'id'] as const
@@ -6,6 +8,28 @@ type SortField = typeof validSortFields[number]
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
+
+  const userExist = await auth.api.getSession({
+    headers: await headers()
+  })
+
+  if (!userExist) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const permissionCheck = await auth.api.userHasPermission({
+    headers: await headers(),
+    body: {
+      userId: userExist.user.id,
+      permissions: {
+        dashboard: ["view"]
+      }
+    }
+  });
+
+  if (!permissionCheck.success) {
+    return NextResponse.json({ error: "Insufficient permissions" }, { status: 403 })
+  }
 
   const page = Math.max(1, parseInt(searchParams.get('currentPage') || '1', 10))
   const pageSize = Math.max(1, Math.min(100, parseInt(searchParams.get('pageSize') || '10', 10)))

@@ -1,12 +1,36 @@
 // app/api/reviews/[id]/route.ts
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id: reviewId } = await params;
 
   if (!reviewId) {
     return NextResponse.json({ error: 'Invalid review ID' }, { status: 400 });
+  }
+
+  const userExist = await auth.api.getSession({
+    headers: await headers()
+  })
+
+  if (!userExist) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const permissionCheck = await auth.api.userHasPermission({
+    headers: await headers(),
+    body: {
+      userId: userExist.user.id,
+      permissions: {
+        dashboard: ["view"]
+      }
+    }
+  });
+
+  if (!permissionCheck.success) {
+    return NextResponse.json({ error: "Insufficient permissions" }, { status: 403 })
   }
 
   try {
@@ -38,6 +62,28 @@ export async function DELETE(
 
   if (!reviewId) {
     return NextResponse.json({ error: 'Invalid review ID' }, { status: 400 });
+  }
+
+  const userExist = await auth.api.getSession({
+    headers: await headers()
+  })
+
+  if (!userExist) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const permissionCheck = await auth.api.userHasPermission({
+    headers: await headers(),
+    body: {
+      userId: userExist.user.id,
+      permissions: {
+        dashboard: ["view", 'delete']
+      }
+    }
+  });
+
+  if (!permissionCheck.success) {
+    return NextResponse.json({ error: "Insufficient permissions" }, { status: 403 })
   }
 
   try {
@@ -76,6 +122,28 @@ export async function PUT(
 
   if (!reviewId) {
     return NextResponse.json({ error: 'Invalid review ID' }, { status: 400 });
+  }
+
+  const userExist = await auth.api.getSession({
+    headers: await headers()
+  })
+
+  if (!userExist) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const permissionCheck = await auth.api.userHasPermission({
+    headers: await headers(),
+    body: {
+      userId: userExist.user.id,
+      permissions: {
+        dashboard: ["update"]
+      }
+    }
+  });
+
+  if (!permissionCheck.success) {
+    return NextResponse.json({ error: "Insufficient permissions" }, { status: 403 })
   }
 
   try {
@@ -137,6 +205,28 @@ export async function PATCH(
 
   if (!reviewId) {
     return NextResponse.json({ error: 'Invalid review ID' }, { status: 400 });
+  }
+
+  const userExist = await auth.api.getSession({
+    headers: await headers()
+  })
+
+  if (!userExist) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const permissionCheck = await auth.api.userHasPermission({
+    headers: await headers(),
+    body: {
+      userId: userExist.user.id,
+      permissions: {
+        dashboard: ["approve", "update"]
+      }
+    }
+  });
+
+  if (!permissionCheck.success) {
+    return NextResponse.json({ error: "Insufficient permissions" }, { status: 403 })
   }
 
   try {

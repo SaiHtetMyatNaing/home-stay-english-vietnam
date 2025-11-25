@@ -31,7 +31,7 @@ export default function Page() {
   }, [session?.data?.user, router]);
 
   if (session?.data?.user) {
-    return null; 
+    return null;
   }
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
@@ -40,7 +40,7 @@ export default function Page() {
       await signIn.social(
         {
           provider: "google",
-          callbackURL: "/reviews/write-review",
+          callbackURL: session?.data?.user.role === "superAdmin" || 'superUser' ? "/admin" : "/reviews/write-review",
         },
         {
           onError: (ctx) => {
@@ -74,7 +74,7 @@ export default function Page() {
           disabled={isLoading}
           size="lg"
           variant="outline"
-          className="w-full h-14 text-base font-medium flex items-center justify-center gap-3"
+          className="w-full cursor-pointer h-14 text-base font-medium flex items-center justify-center gap-3"
         >
           {isLoading ? (
             <>

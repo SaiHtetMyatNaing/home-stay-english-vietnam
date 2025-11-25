@@ -72,8 +72,6 @@ export async function GET(
   }
 }
 
-
-
 export async function POST(req: NextRequest) {
   try {
     // Get userId from auth session (example with next-auth)

@@ -28,9 +28,8 @@ const StarRating = ({ rating }: { rating: number }) => (
     {[1, 2, 3, 4, 5].map((i) => (
       <Star
         key={i}
-        className={`w-4 h-4 ${
-          i <= rating ? "fill-[#46b96c] text-[#46b96c]" : "text-gray-300"
-        }`}
+        className={`w-4 h-4 ${i <= rating ? "fill-[#46b96c] text-[#46b96c]" : "text-gray-300"
+          }`}
       />
     ))}
   </div>
@@ -40,8 +39,8 @@ export default async function VolunteerReviews() {
   const session = await auth.api.getSession({ headers: await headers() });
   const user = session?.user;
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
-                (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
   const res = await fetch(`${baseUrl}/api/reviews`, { cache: "no-store" });
   const reviews: Review[] = res.ok ? await res.json() : [];
@@ -168,12 +167,6 @@ export default async function VolunteerReviews() {
                   See All Reviews
                 </Link>
               </Button>
-            )}
-
-            {user && !showWriteReviewButton && (
-              <div className="text-green-600 font-medium text-lg bg-green-50 px-8 py-4 rounded-xl border border-green-200">
-                Thank you for sharing your experience!
-              </div>
             )}
           </div>
         </div>

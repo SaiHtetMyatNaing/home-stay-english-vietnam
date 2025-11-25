@@ -2,32 +2,8 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import prisma from "./prisma";
-import { defaultStatements, adminAc } from "better-auth/plugins/admin/access";
-import { createAccessControl } from "better-auth/plugins/access";
-
-const statement = {
-  ...defaultStatements,
-  review: ["create", "view", "approve", "delete"],
-  dashboard: ["view", "manage"]
-} as const;
-
-const ac = createAccessControl(statement)
-
-export const user = ac.newRole({
-  review: ["create", "view"],
-})
-
-export const admin = ac.newRole({
-  review: ["create", "view", "approve"],
-  dashboard: ['view', 'manage'],
-  ...adminAc.statements,
-})
-
-export const superadmin = ac.newRole({
-  review: ["create", "view", "approve", "delete"],
-  dashboard: ["view", "manage"],
-  ...adminAc.statements,
-});
+import { ac, superUser, superAdmin, user } from "./permission";
+import { admin } from "better-auth/plugins/admin";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -39,6 +15,27 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
+
+  user : {
+    additionalFields : {
+      role :  {
+        type : "string",
+        required : false,
+        defaultValue : "user",
+        input : false,
+      }
+    }
+  },
   trustedOrigins: ["http://localhost:3000", "https://home-stay-english-vietnam.vercel.app", "https://www.englishhomestayvietnam.com/"],
-  plugins: [nextCookies()]
+  plugins: [
+    admin({
+      ac,
+      roles: {
+        user,
+        superUser,
+        superAdmin
+      }
+    }),
+    nextCookies()
+  ]
 });
