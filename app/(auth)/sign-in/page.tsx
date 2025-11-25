@@ -48,7 +48,7 @@ export default function Page() {
           },
           onSuccess: () => {
             toast.success("Welcome back!");
-            router.push("/");
+            router.push("/reviews/write-review");
           },
         }
       );
