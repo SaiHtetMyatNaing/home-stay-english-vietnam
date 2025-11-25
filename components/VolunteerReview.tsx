@@ -28,8 +28,7 @@ const StarRating = ({ rating }: { rating: number }) => (
     {[1, 2, 3, 4, 5].map((i) => (
       <Star
         key={i}
-        className={`w-4 h-4 ${i <= rating ? "fill-[#46b96c] text-[#46b96c]" : "text-gray-300"
-          }`}
+        className={`w-4 h-4 ${i <= rating ? "fill-[#46b96c] text-[#46b96c]" : "text-gray-300"}`}
       />
     ))}
   </div>
@@ -39,8 +38,9 @@ export default async function VolunteerReviews() {
   const session = await auth.api.getSession({ headers: await headers() });
   const user = session?.user;
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
   const res = await fetch(`${baseUrl}/api/reviews`, { cache: "no-store" });
   const reviews: Review[] = res.ok ? await res.json() : [];
@@ -51,36 +51,32 @@ export default async function VolunteerReviews() {
     .slice(0, 6);
 
   const approvedCount = approvedReviews.length;
-  const userHasReviewed = user
-    ? reviews.some((r) => r.userId === user.id && r.approved)
-    : false;
+  const userHasReviewed = user ? reviews.some((r) => r.userId === user.id && r.approved) : false;
   const showWriteReviewButton = !userHasReviewed;
 
   return (
     <section id="review" className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        {approvedReviews.length > 0 && (
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#46b96c] mb-4">
-              What Our Volunteers Say
-            </h2>
-            <p className="text-base sm:text-lg text-gray-700 max-w-2xl mx-auto">
-              Real experiences from volunteers who taught English and lived with Vietnamese host families.
-            </p>
-          </div>
-        )}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#46b96c] mb-4">
+            What Our Volunteers Say
+          </h2>
+          <p className="text-base sm:text-lg text-gray-700 max-w-2xl mx-auto">
+            Real experiences from volunteers who taught English and lived with Vietnamese host families.
+          </p>
+        </div>
 
-        {/* Reviews Grid */}
-        {approvedReviews.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7 lg:gap-8 mb-12">
+        {/* Reviews Grid - RESPONSIVE: 1 col mobile, 2 tablet, 3 desktop */}
+        {approvedCount > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {approvedReviews.map((review) => (
               <Card
                 key={review.id}
                 className="hover:shadow-xl transition-all duration-300 border-gray-200 bg-white h-full flex flex-col"
               >
                 <CardContent className="pt-6 pb-6 px-5 flex flex-col h-full">
-                  {/* Header: Avatar + Info + Stars (responsive layout) */}
+                  {/* Avatar + Info + Stars */}
                   <div className="flex items-start gap-4 mb-4">
                     <Avatar className="w-12 h-12 ring-2 ring-[#46b96c]/30 flex-shrink-0">
                       <AvatarImage src={review.user.image || undefined} />
@@ -98,14 +94,14 @@ export default async function VolunteerReviews() {
                         <span className="truncate">{review.nationality}</span>
                       </div>
 
-                      {/* Stars appear BELOW name/country on mobile, beside on large screens */}
-                      <div className="flex md:hidden justify-start mt-2">
+                      {/* Stars below on mobile */}
+                      <div className="flex sm:hidden mt-2">
                         <StarRating rating={review.rating} />
                       </div>
                     </div>
 
-                    {/* Stars on the right — hidden on mobile, shown on md+ */}
-                    <div className="hidden md:flex ml-auto">
+                    {/* Stars on right - hidden on mobile */}
+                    <div className="hidden sm:flex ml-auto">
                       <StarRating rating={review.rating} />
                     </div>
                   </div>
@@ -137,6 +133,19 @@ export default async function VolunteerReviews() {
               </Card>
             ))}
           </div>
+        ) : (
+          /* Empty State */
+          <div className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#46b96c]/10 mb-6">
+              <Star className="w-12 h-12 text-[#46b96c]" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-3">
+              Be the First to Share Your Experience!
+            </h3>
+            <p className="text-gray-600 max-w-md mx-auto">
+              Your story could inspire the next volunteer to join this amazing journey in Vietnam.
+            </p>
+          </div>
         )}
 
         {/* CTA Section */}
@@ -147,7 +156,7 @@ export default async function VolunteerReviews() {
             </p>
           ) : (
             <p className="text-gray-700 font-medium text-lg mb-8">
-              Be the first to share your volunteer experience!
+              Start the conversation — be the first to leave a review!
             </p>
           )}
 
@@ -164,7 +173,7 @@ export default async function VolunteerReviews() {
             {approvedCount > 0 && (
               <Button asChild size="lg" variant="outline" className="w-full sm:w-auto border-[#46b96c] text-[#46b96c] hover:bg-[#46b96c]/5">
                 <Link href="/reviews">
-                  See All Reviews
+                  See All Reviews ({approvedCount})
                 </Link>
               </Button>
             )}
