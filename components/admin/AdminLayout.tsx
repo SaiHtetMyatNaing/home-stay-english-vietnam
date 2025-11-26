@@ -17,6 +17,7 @@ import {
   IconButton,
   Avatar,
   alpha,
+  Tooltip,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -27,6 +28,8 @@ import SchoolIcon from "@mui/icons-material/School";
 import HomeIcon from "@mui/icons-material/Home";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import Image from "next/image";
+import { useSession } from "@/lib/auth-client";
+import UserAvatarDropdown from "./UserAvatar";
 
 const drawerWidth = 260;
 
@@ -42,12 +45,12 @@ const menuItems = [
 export function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(true);
-
+  const session = useSession();
   const cleanPath = pathname.split("?")[0];
   const activePath = menuItems.find(item => item.path === cleanPath)?.path || "/admin";
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default" , shadow :"none"}}>
+    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default", shadow: "none" }}>
       {/* Sidebar */}
       <Drawer
         variant="permanent"
@@ -70,7 +73,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         <List disablePadding>
           <ListItem disablePadding>
             <ListItemButton
-            href="/"
+              href="/"
               sx={{
                 minHeight: 48,
                 borderRadius: open ? 3 : "50%",
@@ -191,15 +194,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
 
             <Box sx={{ flexGrow: 1 }} />
 
-            <Avatar
-              src="/avatar.jpg"
-              sx={{
-                width: 40,
-                height: 40,
-                border: "3px solid",
-                borderColor: "primary.main",
-              }}
-            />
+            <UserAvatarDropdown session={session} />
           </Toolbar>
         </AppBar>
 
