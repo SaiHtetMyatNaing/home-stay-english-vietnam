@@ -4,6 +4,9 @@ import  prisma  from '@/lib/prisma'
 import z from 'zod';
 import { auth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
+import { Resend } from 'resend';
+import ThankYouReviewEmail from "@/components/ReviewThankYouEmail";
+import { headers } from 'next/headers';
 
 // Validation schema (no userId - it comes from auth)
 const createReviewSchema = z.object({
@@ -72,13 +75,18 @@ export async function GET(
   }
 }
 
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 export async function POST(req: NextRequest) {
   try {
-    // Get userId from auth session (example with next-auth)
-    // Replace this with your actual authentication method
+    // Get headers once and reuse
+    const headersList = await headers();
+    
+    // Get userId from auth session
     const session = await auth.api.getSession({
-      headers: req.headers,
-    }) // or use your auth provider
+      headers: headersList,
+    });
     
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -87,6 +95,27 @@ export async function POST(req: NextRequest) {
           error: 'Unauthorized - please log in to submit a review',
         },
         { status: 401 }
+      );
+    }
+
+    // Check permissions
+    const permissionCheck = await auth.api.userHasPermission({
+      headers: headersList, // Reuse the same headers
+      body: {
+        userId: session.user.id,
+        permissions: {
+          review: ["write"],
+        },
+      },
+    });
+    
+    if (!permissionCheck.success) {
+      return NextResponse.json(
+        { 
+          success: false,
+          error: "Insufficient permissions to submit a review" 
+        },
+        { status: 403 }
       );
     }
 
@@ -107,7 +136,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'User has already submitted a review',
+          error: 'You have already submitted a review',
         },
         { status: 409 }
       );
@@ -116,7 +145,7 @@ export async function POST(req: NextRequest) {
     // Create the review
     const review = await prisma.review.create({
       data: {
-        userId, // From authenticated session
+        userId,
         stayDuration: validatedData.stayDuration,
         stayPeriod: validatedData.stayPeriod,
         rating: validatedData.rating,
@@ -124,7 +153,7 @@ export async function POST(req: NextRequest) {
         nationality: validatedData.nationality,
         countryFlag: validatedData.countryFlag,
         reviewText: validatedData.reviewText,
-        approved: false, // Reviews need approval by default
+        approved: false,
       },
       include: {
         user: {
@@ -136,7 +165,31 @@ export async function POST(req: NextRequest) {
         },
       },
     });
+     
     revalidatePath("/reviews");
+
+    // Send thank you email (non-blocking)
+    try {
+      const { error } = await resend.emails.send({
+        from: "English Homestay Vietnam <thank-you@review.englishhomestayvietnam.com>",
+        to: [review.user.email],
+        subject: "Thank you for sharing your story!",
+        react: ThankYouReviewEmail({ 
+          userName: review.user.name || "Guest",
+          reviewTitle: review.title,
+          rating: review.rating,
+          reviewText: review.reviewText,
+        }),
+      });
+
+      if (error) {
+        console.error('Failed to send thank you email:', error);
+      }
+    } catch (emailError) {
+      console.error('Error sending thank you email:', emailError);
+    }
+
+    // Return success response for review creation
     return NextResponse.json(
       {
         success: true,
@@ -152,6 +205,7 @@ export async function POST(req: NextRequest) {
         {
           success: false,
           error: 'Validation failed',
+          details: error
         },
         { status: 400 }
       );
