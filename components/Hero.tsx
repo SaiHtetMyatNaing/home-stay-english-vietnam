@@ -7,8 +7,8 @@ import { ImagesSlider } from "./ui/images-slider";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
-export function HeroSectionDemo() {
-  const images = [
+export function HeroSectionDemo({ content }: { content?: any }) {
+  const images = content?.images?.length > 0 ? content.images : [
     "/home_stay_vietnam_1.jpg",
     "/home_stay_vietnam_2.jpg",
     "/home_stay_vietnam_3.jpg",
@@ -45,7 +45,7 @@ export function HeroSectionDemo() {
           className="inline-flex items-center gap-2 px-5 py-2 mb-6 text-sm font-medium tracking-wider text-white border rounded-full bg-white/20 backdrop-blur-md border-white/30"
         >
           <Heart className="w-4 h-4 text-lime-300 fill-lime-300" />
-          STAY FREE • TEACH ENGLISH • LIVE LOCAL
+          {content?.subtitle || "STAY FREE • TEACH ENGLISH • LIVE LOCAL"}
         </motion.div>
 
         {/* Main Headline */}
@@ -55,10 +55,16 @@ export function HeroSectionDemo() {
           transition={{ delay: 0.3, duration: 0.7 }}
           className="mb-6 text-5xl font-bold leading-tight text-white md:text-7xl lg:text-8xl"
         >
-          Teach. Travel.{" "}
-          <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-300 to-lime-400">
-            Connect.
-          </span>
+          {content?.title ? (
+            content.title
+          ) : (
+            <>
+              Teach. Travel.{" "}
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-300 to-lime-400">
+                Connect.
+              </span>
+            </>
+          )}
         </motion.h1>
 
         {/* Subheadline */}
@@ -68,8 +74,7 @@ export function HeroSectionDemo() {
           transition={{ delay: 0.5, duration: 0.7 }}
           className="max-w-2xl mb-5 text-xl font-light text-gray-100 md:text-2xl"
         >
-          Live with passionate Vietnamese learners. Share your language. Build
-          lifelong bonds.
+          {content?.description || "Live with passionate Vietnamese learners. Share your language. Build lifelong bonds."}
         </motion.p>
 
         {/* Trust Indicators */}
@@ -97,8 +102,8 @@ export function HeroSectionDemo() {
           className="cursor-pointer"
         >
           <Link
-             href="https://docs.google.com/forms/"
-             target="_blank"
+            href="/apply"
+            target="_blank"
             className="flex items-center gap-3 px-10 py-5 font-semibold text-white transition-all duration-300 rounded-full shadow-2xl cursor-pointer text-md bg-linear-to-r hover:scale-95 from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-emerald-400/30"
           >
             Apply to Stay Free

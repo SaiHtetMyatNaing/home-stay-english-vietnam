@@ -1,12 +1,10 @@
 import { Button } from "./ui/button";
 import { ExternalLink } from "lucide-react";
 import { motion, Variants } from "framer-motion";
+import Link from "next/link";
 
 const ApplySection = () => {
-  const handleApply = () => {
-    // Replace with actual Google Form URL
-    window.open("https://forms.google.com", "_blank");
-  };
+
 
   // Animation variants
   const containerVariants = {
@@ -17,7 +15,7 @@ const ApplySection = () => {
     },
   };
 
-  const itemVariants : Variants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
       opacity: 1,
@@ -56,7 +54,7 @@ const ApplySection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-16">
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -65,18 +63,18 @@ const ApplySection = () => {
             >
               Ready to Begin Your Adventure?
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.7, delay: 0.2 }}
               className="text-xl text-white/95 leading-relaxed"
             >
-              Join our community of international volunteers and Vietnamese learners. 
+              Join our community of international volunteers and Vietnamese learners.
               Start your cultural exchange journey today!
             </motion.p>
           </div>
-          
+
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -124,7 +122,7 @@ const ApplySection = () => {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -132,16 +130,15 @@ const ApplySection = () => {
             className="text-center"
           >
             <motion.div whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 400 }} className="inline-block">
-              <Button
-                onClick={handleApply}
-                size="lg"
+              <Link
+                href="/apply"
                 className="bg-white text-primary hover:bg-white/95 text-lg px-12 py-6 shadow-xl font-semibold rounded-xl border border-white/10"
               >
                 Apply Now <ExternalLink className="ml-2 w-5 h-5" />
-              </Button>
+              </Link>
             </motion.div>
-            
-            <motion.p 
+
+            <motion.p
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

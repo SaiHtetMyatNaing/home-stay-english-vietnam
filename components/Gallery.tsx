@@ -5,9 +5,9 @@ import { motion, useAnimation, useInView, Variants } from "framer-motion";
 import Image from "next/image";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
 
-const Gallery = () => {
-  // 12 images for 4 columns × 3 rows
-  const images = [
+const Gallery = ({ content }: { content?: any }) => {
+  // 12 images for 4 columns × 3 rows - defaults or from CMS
+  const defaultImages = [
     { src: "/home_stay_vietnam_5.jpg", alt: "Enjoying Leisure Time Together" },
     { src: "/home_stay_vietnam_2.jpg", alt: "Perfect Night Out" },
     { src: "/home_stay_vietnam_7.jpg", alt: "Exploring Hanoi together" },
@@ -22,9 +22,16 @@ const Gallery = () => {
     { src: "/home_stay_vietnam_6.jpg", alt: "Farewell celebrations" },
   ];
 
+  const images = content?.images?.length > 0
+    ? content.images.map((url: string, index: number) => ({ src: url, alt: `Gallery Image ${index + 1}` }))
+    : defaultImages;
+
   const videoRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [videoId] = useState("0dPxWVHBR8g");
+  const videoUrl = content?.videoUrl || "0dPxWVHBR8g";
+  // Extract ID if full URL is provided (basic check)
+  const videoId = videoUrl.includes("v=") ? videoUrl.split("v=")[1]?.split("&")[0] : videoUrl;
+
 
   // Animation controls
   const sectionControls = useAnimation();
@@ -88,7 +95,7 @@ const Gallery = () => {
           className="mb-12 text-center"
         >
           <h2 className="mb-4 text-4xl font-bold md:text-5xl text-foreground">
-            Life at English Homestay Vietnam
+            {content?.title || "Life at English Homestay Vietnam"}
           </h2>
           <motion.div
             initial={{ scaleX: 0 }}
@@ -98,9 +105,7 @@ const Gallery = () => {
             className="w-20 h-1 mx-auto mb-6 origin-left bg-primary"
           />
           <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
-            See what daily life looks like in our homestay community. These
-            moments capture the friendships, learning, and cultural exchange
-            that make our program special.
+            {content?.description || "See what daily life looks like in our homestay community. These moments capture the friendships, learning, and cultural exchange that make our program special."}
           </p>
         </motion.div>
 
@@ -114,7 +119,7 @@ const Gallery = () => {
             className="w-full"
           >
             <CarouselContent>
-              {images.map((image, index) => (
+              {images.map((image: any, index: number) => (
                 <CarouselItem key={index} className="md:basis-1/2">
                   <div className="relative h-64 overflow-hidden rounded-lg cursor-pointer shadow-card group md:h-72">
                     <Image
@@ -143,7 +148,7 @@ const Gallery = () => {
           viewport={{ once: true, margin: "-100px" }}
           className="hidden grid-cols-4 gap-4 mx-auto lg:grid max-w-7xl"
         >
-          {images.map((image, index) => (
+          {images.map((image: any, index: number) => (
             <motion.div
               key={index}
               variants={itemVariants}
@@ -181,7 +186,7 @@ const Gallery = () => {
               transition={{ delay: 0.2 }}
               className="mb-4 text-2xl font-semibold text-foreground"
             >
-              Watch Our Story
+              {content?.subtitle || "Watch Our Story"}
             </motion.h3>
             <motion.p
               initial={{ opacity: 0 }}

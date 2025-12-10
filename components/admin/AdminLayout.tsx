@@ -34,12 +34,10 @@ import UserAvatarDropdown from "./UserAvatar";
 const drawerWidth = 260;
 
 const menuItems = [
-  { text: "Dashboard", icon: <CottageIcon />, path: "/admin" },
+  { text: "Dashboard", icon: <CottageIcon />, path: "/admin/landing-page" },
   { text: "Reviews", icon: <Inventory2Icon />, path: "/admin/reviews" },
   { text: "Applications", icon: <CalendarMonthIcon />, path: "/admin/applications" },
-  { text: "Students", icon: <SchoolIcon />, path: "/admin/students" },
-  { text: "Homestays", icon: <HomeIcon />, path: "/admin/homestays" },
-  { text: "Teachers", icon: <RecordVoiceOverIcon />, path: "/admin/teachers" },
+  { text: "Staff", icon: <SchoolIcon />, path: "/admin/staff" },
 ];
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
