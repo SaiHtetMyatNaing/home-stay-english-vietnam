@@ -2,7 +2,7 @@
 import { Home, Utensils, Users, Calendar, FileText, Heart } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 
-const Benefits = () => {
+const Benefits = ({ content }: { content?: any }) => {
   const benefits = [
     {
       icon: <Home className="w-8 h-8 text-primary" />,
@@ -74,32 +74,31 @@ const Benefits = () => {
           transition={{ duration: 0.6 }}
           className="mb-12 text-center"
         >
-          <motion.h2 
+          <motion.h2
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mb-4 text-4xl font-bold md:text-5xl text-foreground"
           >
-            Why Choose Us?
+            {content?.title || "Why Choose Us?"}
           </motion.h2>
-          <motion.div 
+          <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.4, delay: 0.2 }}
             className="w-20 h-1 mx-auto mb-6 origin-left bg-linear-to-r from-primary to-secondary"
           />
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
             className="max-w-2xl mx-auto text-lg text-muted-foreground"
           >
-            We offer more than just a place to stay. Join our community and discover the benefits 
-            of cultural exchange.
+            {content?.description || "We offer more than just a place to stay. Join our community and discover the benefits of cultural exchange."}
           </motion.p>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="grid max-w-6xl grid-cols-2 gap-4 mx-auto lg:grid-cols-3 sm:gap-6 lg:gap-8"
           variants={containerVariants}
           initial="hidden"
@@ -113,7 +112,7 @@ const Benefits = () => {
               className="relative flex flex-col justify-between h-full p-4 overflow-hidden transition-all duration-500 border shadow-lg group bg-card/80 backdrop-blur-xs sm:p-6 rounded-xl hover:shadow-2xl border-border/50 hover:border-primary/30 hover:-translate-y-2"
             >
               <div className="flex flex-col items-center text-center">
-                <motion.div 
+                <motion.div
                   className="flex items-center justify-center w-16 h-16 mb-4 transition-all duration-300 rounded-full bg-linear-to-br from-primary/10 to-secondary/10 group-hover:bg-primary/20"
                   variants={iconVariants}
                   initial="hidden"

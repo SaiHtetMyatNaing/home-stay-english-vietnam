@@ -4,8 +4,9 @@ import { GraduationCap, Home } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
-const Programs = () => {
+const Programs = ({ content }: { content?: any }) => {
   const programs = [
+    // ... items remain hardcoded for now or fetched if we expand schema
     {
       icon: <GraduationCap className="w-12 h-12 text-primary" />,
       title: "Volunteer English Teacher",
@@ -78,7 +79,7 @@ const Programs = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mb-3 text-2xl font-bold sm:text-3xl md:text-4xl text-foreground"
           >
-            Our Programs
+            {content?.title || "Our Programs"}
           </motion.h2>
 
           <motion.div
@@ -96,8 +97,7 @@ const Programs = () => {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="max-w-2xl px-4 mx-auto text-sm sm:text-base text-muted-foreground"
           >
-            Choose the experience that fits your journey. Both programs offer unique opportunities for
-            cultural exchange and personal growth.
+            {content?.description || "Choose the experience that fits your journey. Both programs offer unique opportunities for cultural exchange and personal growth."}
           </motion.p>
         </motion.div>
 
@@ -123,7 +123,7 @@ const Programs = () => {
                     transition={{ duration: 0.8 }}
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
-                  
+
                   <motion.div
                     className="absolute text-white bottom-3 left-3 drop-shadow-lg"
                     initial={{ opacity: 0, y: 10 }}

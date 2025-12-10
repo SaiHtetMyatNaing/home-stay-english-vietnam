@@ -32,6 +32,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               edit: "/admin/reviews/edit/:id",
               meta: { canDelete: true },
             },
+            {
+              name: "applications",
+              list: "/admin/applications",
+              show: "/admin/applications/show/:id",
+              edit: "/admin/applications/edit/:id",
+              meta: { canDelete: true },
+            },
+            {
+              name: "landing-page",
+              list: "/admin/landing-page",
+              meta: { label: "Site Content" },
+            },
           ]}
           options={{ syncWithLocation: true }}
           dataProvider={dataProvider(API_URL)}

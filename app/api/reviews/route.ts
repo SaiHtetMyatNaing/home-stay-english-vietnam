@@ -168,7 +168,6 @@ export async function POST(req: NextRequest) {
      
     revalidatePath("/reviews");
 
-    // Send thank you email (non-blocking)
     try {
       const { error } = await resend.emails.send({
         from: "English Homestay Vietnam <thank-you@review.englishhomestayvietnam.com>",

@@ -3,11 +3,13 @@ import { motion, Variants } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 
-const About = () => {
+const About = ({ content }: { content?: any }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const containerVariants : Variants= {
+  const imageSrc = content?.images?.length > 0 ? content.images[0] : "/home_stay_vietnam_7.jpg";
+
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -18,7 +20,7 @@ const About = () => {
     },
   };
 
-  const itemVariants : Variants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
@@ -30,7 +32,7 @@ const About = () => {
     },
   };
 
-  const statsVariants : Variants = {
+  const statsVariants: Variants = {
     hidden: { scale: 0.8, opacity: 0 },
     visible: {
       scale: 1,
@@ -53,7 +55,7 @@ const About = () => {
           className="text-center mb-14"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-            About Us
+            {content?.title || "About Us"}
           </h2>
           <motion.div
             initial={{ width: 0 }}
@@ -73,11 +75,10 @@ const About = () => {
           <div className="space-y-7">
             <motion.div variants={itemVariants}>
               <h3 className="text-3xl font-semibold text-foreground mb-3">
-                What is English Homestay Vietnam?
+                {content?.subtitle || "What is English Homestay Vietnam?"}
               </h3>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                We are a bridge between cultures, connecting passionate travelers with eager Vietnamese learners 
-                in an authentic homestay experience.
+                {content?.description || "We are a bridge between cultures, connecting passionate travelers with eager Vietnamese learners in an authentic homestay experience."}
               </p>
             </motion.div>
 
@@ -102,8 +103,8 @@ const About = () => {
                   <h4 className="text-xl font-bold text-foreground">Our Mission</h4>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Create a cultural exchange space where locals improve their English and foreigners experience 
-                  real Vietnam. We believe in the power of human connection, shared learning, and cultural understanding 
+                  Create a cultural exchange space where locals improve their English and foreigners experience
+                  real Vietnam. We believe in the power of human connection, shared learning, and cultural understanding
                   to transform lives on both sides of the exchange.
                 </p>
               </div>
@@ -146,7 +147,7 @@ const About = () => {
             <motion.img
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
-              src="/home_stay_vietnam_7.jpg"
+              src={imageSrc}
               alt="Cultural exchange activities"
               className="rounded-2xl shadow-2xl w-full object-cover"
             />
